@@ -109,7 +109,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         njContractorLicense: data.njContractorLicense,
         njLicenseType: data.njLicenseType,
         njLicenseExpiry: data.njLicenseExpiry ? new Date(data.njLicenseExpiry) : undefined,
-        isProfileComplete: true,
+        isComplete: true,
         profileCompletionDate: new Date(),
         createdAt: profile?.createdAt || new Date(),
         updatedAt: new Date(),
