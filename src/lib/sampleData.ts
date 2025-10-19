@@ -183,7 +183,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     ],
     subtotal: 70000,
     taxRate: 16,
-    taxAmount: 11200,
     total: 81200,
     notes: 'Primera factura del proyecto - Fase de cimientos completada'
   },
@@ -217,7 +216,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     ],
     subtotal: 67000,
     taxRate: 16,
-    taxAmount: 10720,
     total: 77720,
     notes: 'Segunda factura - Instalaciones eléctricas y de plomería'
   },
@@ -251,7 +249,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     ],
     subtotal: 43000,
     taxRate: 16,
-    taxAmount: 6880,
     total: 49880,
     notes: 'Tercera factura - Acabados y pintura (VENCIDA)'
   },
@@ -285,7 +282,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     ],
     subtotal: 40000,
     taxRate: 16,
-    taxAmount: 6400,
     total: 46400,
     notes: 'Cuarta factura - Instalación de pisos completada'
   },
@@ -319,7 +315,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     ],
     subtotal: 23000,
     taxRate: 16,
-    taxAmount: 3680,
     total: 26680,
     notes: 'Quinta factura - Trabajos finales y entrega del proyecto'
   }
