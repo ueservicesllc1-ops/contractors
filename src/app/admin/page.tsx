@@ -10,22 +10,16 @@ import TrialHeroModal from '@/components/dashboard/TrialHeroModal';
 import { 
   UserGroupIcon, 
   CurrencyDollarIcon, 
-  ChartBarIcon,
-  CogIcon,
   ShieldCheckIcon,
   StarIcon,
   UserIcon,
   EyeIcon,
-  PencilIcon,
   TrashIcon,
-  CheckIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 
 export default function AdminPage() {
-  const { user } = useAuth();
-  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
@@ -285,7 +279,7 @@ export default function AdminPage() {
                 </label>
                 <select
                   value={filterType}
-                  onChange={(e) => setFilterType(e.target.value as any)}
+                  onChange={(e) => setFilterType(e.target.value as 'all' | 'premium' | 'free')}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 >
                   <option value="all">Todos</option>
