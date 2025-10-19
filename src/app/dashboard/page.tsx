@@ -10,6 +10,7 @@ import InvoiceStats from '@/components/dashboard/InvoiceStats';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { CrownIcon } from '@heroicons/react/24/solid';
 import { ProjectService } from '@/lib/projectService';
 import { InvoiceService } from '@/lib/invoiceService';
 import { EstimateService } from '@/lib/estimateService';
@@ -17,7 +18,7 @@ import { Project, Invoice, Estimate } from '@/types';
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { profile } = useProfile();
+  const { profile, isPremium, subscriptionType } = useProfile();
   const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -93,11 +94,23 @@ export default function DashboardPage() {
       <AppLayout>
         <div className="space-y-6">
           {/* Page header */}
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              {t('dashboard.description') || 'Resumen general de tus proyectos y actividades'}
-            </p>
+          <div className="flex justify-between items-start">
+            <div>
+              <div className="flex items-center space-x-3">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
+                {isPremium && (
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full">
+                    <CrownIcon className="h-5 w-5" />
+                    <span className="text-sm font-medium">
+                      {subscriptionType === 'enterprise' ? 'Enterprise' : 'Premium'}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                {t('dashboard.description') || 'Resumen general de tus proyectos y actividades'}
+              </p>
+            </div>
           </div>
 
           {/* Stats cards */}

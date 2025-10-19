@@ -52,8 +52,15 @@ export default function SettingsPage() {
               </p>
             </div>
             
-            {/* Premium Badge */}
-            {!isPremium && (
+            {/* Premium Status */}
+            {isPremium ? (
+              <div className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-blue-600 text-white px-4 py-2 rounded-lg">
+                <StarIcon className="h-5 w-5" />
+                <span className="font-medium">
+                  {subscriptionType === 'enterprise' ? 'Enterprise Plan' : 'Premium Plan'}
+                </span>
+              </div>
+            ) : (
               <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-lg">
                 <StarIcon className="h-5 w-5" />
                 <span className="font-medium">Upgrade to Premium</span>
@@ -262,6 +269,17 @@ export default function SettingsPage() {
             {/* Action Buttons */}
             <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
               <div className="flex items-center space-x-2">
+                {isPremium && (
+                  <div className="flex items-center space-x-2 text-green-600">
+                    <CheckIcon className="h-5 w-5" />
+                    <span className="text-sm font-medium">
+                      {subscriptionType === 'enterprise' ? 'Enterprise Plan Active' : 'Premium Plan Active'}
+                    </span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex space-x-3">
                 {!isPremium && (
                   <button
                     onClick={handleUpgrade}
@@ -271,9 +289,7 @@ export default function SettingsPage() {
                     Upgrade to Premium
                   </button>
                 )}
-              </div>
-              
-              <div className="flex space-x-3">
+                
                 <button
                   type="button"
                   className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
