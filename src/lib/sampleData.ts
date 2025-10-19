@@ -157,7 +157,7 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     invoiceNumber: 'INV-2025-001',
     clientId: '', // Se asignará dinámicamente
     projectId: '', // Se asignará dinámicamente
-    type: 'invoice',
+    type: 'final',
     status: 'paid',
     issueDate: new Date('2025-01-15'),
     dueDate: new Date('2025-02-15'),
@@ -185,7 +185,7 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     invoiceNumber: 'INV-2025-002',
     clientId: '', // Se asignará dinámicamente
     projectId: '', // Se asignará dinámicamente
-    type: 'invoice',
+    type: 'final',
     status: 'pending',
     issueDate: new Date('2025-02-10'),
     dueDate: new Date('2025-03-10'),
@@ -213,7 +213,7 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     invoiceNumber: 'INV-2025-003',
     clientId: '', // Se asignará dinámicamente
     projectId: '', // Se asignará dinámicamente
-    type: 'invoice',
+    type: 'final',
     status: 'overdue',
     issueDate: new Date('2025-03-05'),
     dueDate: new Date('2025-04-05'),
@@ -241,7 +241,7 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     invoiceNumber: 'INV-2025-004',
     clientId: '', // Se asignará dinámicamente
     projectId: '', // Se asignará dinámicamente
-    type: 'invoice',
+    type: 'final',
     status: 'paid',
     issueDate: new Date('2025-04-12'),
     dueDate: new Date('2025-05-12'),
@@ -269,7 +269,7 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     invoiceNumber: 'INV-2025-005',
     clientId: '', // Se asignará dinámicamente
     projectId: '', // Se asignará dinámicamente
-    type: 'invoice',
+    type: 'final',
     status: 'pending',
     issueDate: new Date('2025-05-08'),
     dueDate: new Date('2025-06-08'),
