@@ -72,8 +72,7 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Calle Reforma 123',
     city: 'Ciudad de México',
     state: 'CDMX',
-    zipCode: '01000',
-    notes: 'Proyecto con materiales ecológicos y sistema de paneles solares'
+    zipCode: '01000'
   },
   {
     name: 'Edificio Comercial Centro',
@@ -88,8 +87,7 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Av. Insurgentes 456',
     city: 'Ciudad de México',
     state: 'CDMX',
-    zipCode: '06100',
-    notes: 'Proyecto con certificación LEED y estacionamiento subterráneo'
+    zipCode: '06100'
   },
   {
     name: 'Remodelación Industrial',
@@ -104,8 +102,7 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Zona Industrial Norte 789',
     city: 'Monterrey',
     state: 'Nuevo León',
-    zipCode: '64000',
-    notes: 'Proyecto completado con ahorro del 1.9% sobre el presupuesto estimado'
+    zipCode: '64000'
   },
   {
     name: 'Complejo Habitacional',
@@ -120,8 +117,7 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Fraccionamiento Las Flores',
     city: 'Tijuana',
     state: 'Baja California',
-    zipCode: '22000',
-    notes: 'Proyecto en pausa por revisión de permisos ambientales'
+    zipCode: '22000'
   },
   {
     name: 'Oficinas Corporativas',
@@ -136,8 +132,7 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Polanco Business District',
     city: 'Ciudad de México',
     state: 'CDMX',
-    zipCode: '11560',
-    notes: 'Proyecto con arquitectura bioclimática y sistema de recolección de agua pluvial'
+    zipCode: '11560'
   }
 ];
 
