@@ -69,12 +69,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     endDate: new Date('2025-06-15'),
     estimatedCost: 450000,
     actualCost: 125000,
-    address: {
-      address: 'Calle Reforma 123',
-      city: 'Ciudad de México',
-      state: 'CDMX',
-      zipCode: '01000'
-    },
+    address: 'Calle Reforma 123',
+    city: 'Ciudad de México',
+    state: 'CDMX',
+    zipCode: '01000',
     notes: 'Proyecto con materiales ecológicos y sistema de paneles solares'
   },
   {
@@ -87,12 +85,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     endDate: new Date('2025-12-31'),
     estimatedCost: 2500000,
     actualCost: 0,
-    address: {
-      address: 'Av. Insurgentes 456',
-      city: 'Ciudad de México',
-      state: 'CDMX',
-      zipCode: '06100'
-    },
+    address: 'Av. Insurgentes 456',
+    city: 'Ciudad de México',
+    state: 'CDMX',
+    zipCode: '06100',
     notes: 'Proyecto con certificación LEED y estacionamiento subterráneo'
   },
   {
@@ -105,12 +101,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     endDate: new Date('2024-12-15'),
     estimatedCost: 800000,
     actualCost: 785000,
-    address: {
-      address: 'Zona Industrial Norte 789',
-      city: 'Monterrey',
-      state: 'Nuevo León',
-      zipCode: '64000'
-    },
+    address: 'Zona Industrial Norte 789',
+    city: 'Monterrey',
+    state: 'Nuevo León',
+    zipCode: '64000',
     notes: 'Proyecto completado con ahorro del 1.9% sobre el presupuesto estimado'
   },
   {
@@ -123,12 +117,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     endDate: new Date('2025-11-30'),
     estimatedCost: 1200000,
     actualCost: 150000,
-    address: {
-      address: 'Fraccionamiento Las Flores',
-      city: 'Tijuana',
-      state: 'Baja California',
-      zipCode: '22000'
-    },
+    address: 'Fraccionamiento Las Flores',
+    city: 'Tijuana',
+    state: 'Baja California',
+    zipCode: '22000',
     notes: 'Proyecto en pausa por revisión de permisos ambientales'
   },
   {
@@ -141,12 +133,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     endDate: new Date('2025-10-15'),
     estimatedCost: 1800000,
     actualCost: 0,
-    address: {
-      address: 'Polanco Business District',
-      city: 'Ciudad de México',
-      state: 'CDMX',
-      zipCode: '11560'
-    },
+    address: 'Polanco Business District',
+    city: 'Ciudad de México',
+    state: 'CDMX',
+    zipCode: '11560',
     notes: 'Proyecto con arquitectura bioclimática y sistema de recolección de agua pluvial'
   }
 ];
