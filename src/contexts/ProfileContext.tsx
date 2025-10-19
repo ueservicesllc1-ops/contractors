@@ -21,17 +21,18 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<CompanyProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const isProfileComplete = profile?.isProfileComplete === true;
+  const isProfileComplete = profile?.isComplete === true;
   
   // Debug: Log cuando cambie el estado del perfil
   useEffect(() => {
-    console.log('Profile state changed:', {
+    console.log('🔍 Profile state changed:', {
       profile: profile,
-      isComplete: profile?.isProfileComplete,
+      isComplete: profile?.isComplete,
       isProfileComplete: isProfileComplete,
-      loading: loading
+      loading: loading,
+      userId: user?.id
     });
-  }, [profile, isProfileComplete, loading]);
+  }, [profile, isProfileComplete, loading, user?.id]);
 
   const fetchProfile = async () => {
     if (!user) {

@@ -10,8 +10,6 @@ import InvoiceStats from '@/components/dashboard/InvoiceStats';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ThemeTest from '@/components/ThemeTest';
-import ThemeDebug from '@/components/ThemeDebug';
 import { ProjectService } from '@/lib/projectService';
 import { InvoiceService } from '@/lib/invoiceService';
 import { EstimateService } from '@/lib/estimateService';
@@ -94,12 +92,6 @@ export default function DashboardPage() {
     <ProtectedRoute>
       <AppLayout>
         <div className="space-y-6">
-          {/* Theme Debug - Temporary */}
-          <ThemeDebug />
-          
-          {/* Theme Test - Temporary */}
-          <ThemeTest />
-          
           {/* Page header */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
