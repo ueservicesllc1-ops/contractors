@@ -198,7 +198,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     contractorEmail: 'contact@freedomlabs.com',
     contractorLicense: 'FL-12345',
     paymentTerms: 'Net 30',
-    currency: 'USD',
     notes: 'Primera factura del proyecto - Fase de cimientos completada'
   },
   {
@@ -246,7 +245,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     contractorEmail: 'contact@freedomlabs.com',
     contractorLicense: 'FL-12345',
     paymentTerms: 'Net 30',
-    currency: 'USD',
     notes: 'Segunda factura - Instalaciones eléctricas y de plomería'
   },
   {
@@ -294,7 +292,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     contractorEmail: 'contact@freedomlabs.com',
     contractorLicense: 'FL-12345',
     paymentTerms: 'Net 30',
-    currency: 'USD',
     notes: 'Tercera factura - Acabados y pintura (VENCIDA)'
   },
   {
@@ -342,7 +339,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     contractorEmail: 'contact@freedomlabs.com',
     contractorLicense: 'FL-12345',
     paymentTerms: 'Net 30',
-    currency: 'USD',
     notes: 'Cuarta factura - Instalación de pisos completada'
   },
   {
@@ -390,7 +386,6 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     contractorEmail: 'contact@freedomlabs.com',
     contractorLicense: 'FL-12345',
     paymentTerms: 'Net 30',
-    currency: 'USD',
     notes: 'Quinta factura - Trabajos finales y entrega del proyecto'
   }
 ];
