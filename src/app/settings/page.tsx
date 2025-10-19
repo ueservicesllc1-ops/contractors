@@ -99,7 +99,7 @@ export default function SettingsPage() {
 
       // Solo agregar logoUrl si existe y no es null
       if (logoUrl && logoUrl !== null) {
-        settingsData.logoUrl = logoUrl;
+        (settingsData as any).logoUrl = logoUrl;
       }
 
       await updateDoc(doc(db, 'company_profiles', profile.userId), settingsData);
