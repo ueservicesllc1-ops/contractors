@@ -23,7 +23,7 @@ import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
   const { t } = useLanguage();
-  const { profile, isPremium, subscriptionType } = useProfile();
+  const { profile, isPremium, subscriptionType, refreshProfile } = useProfile();
   const [activeTab, setActiveTab] = useState('branding');
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
@@ -41,30 +41,59 @@ export default function SettingsPage() {
     paymentReminders: false,
     emailNotifications: true,
     dueDateAlerts: true,
-    logoUrl: null
+    logoUrl: null as string | null
   });
   const [saving, setSaving] = useState(false);
 
   // Cargar configuración existente
   useEffect(() => {
+    console.log('🔧 Settings useEffect triggered');
+    console.log('🔧 Profile object:', profile);
+    console.log('🔧 Profile exists:', !!profile);
+    console.log('🔧 Profile userId:', profile?.userId);
+    
     if (profile) {
-      setSettings(prevSettings => ({
-        ...prevSettings,
-        primaryColor: '#3B82F6',
-        secondaryColor: '#1E40AF',
-        invoiceTemplate: 'Plantilla Clásica',
-        emailSignature: '',
-        invoiceEmailTemplate: '',
-        reminderTemplate: '',
-        defaultTaxRate: 6.25,
-        defaultPaymentDays: 30,
-        paymentTerms: '',
-        currency: 'USD',
-        paymentReminders: false,
-        emailNotifications: true,
-        dueDateAlerts: true,
-        logoUrl: null
-      }));
+      console.log('🔧 Loading settings from profile - Raw profile data:', {
+        primaryColor: profile.primaryColor,
+        secondaryColor: profile.secondaryColor,
+        invoiceTemplate: profile.invoiceTemplate,
+        emailSignature: profile.emailSignature,
+        invoiceEmailTemplate: profile.invoiceEmailTemplate,
+        reminderTemplate: profile.reminderTemplate,
+        defaultTaxRate: profile.defaultTaxRate,
+        defaultPaymentDays: profile.defaultPaymentDays,
+        paymentTerms: profile.paymentTerms,
+        currency: profile.currency,
+        paymentReminders: profile.paymentReminders,
+        emailNotifications: profile.emailNotifications,
+        dueDateAlerts: profile.dueDateAlerts,
+        logoUrl: profile.logoUrl
+      });
+      
+      setSettings(prevSettings => {
+        const newSettings = {
+          ...prevSettings,
+          primaryColor: profile.primaryColor || '#3B82F6',
+          secondaryColor: profile.secondaryColor || '#1E40AF',
+          invoiceTemplate: profile.invoiceTemplate || 'Plantilla Clásica',
+          emailSignature: profile.emailSignature || '',
+          invoiceEmailTemplate: profile.invoiceEmailTemplate || '',
+          reminderTemplate: profile.reminderTemplate || '',
+          defaultTaxRate: profile.defaultTaxRate || 6.25,
+          defaultPaymentDays: profile.defaultPaymentDays || 30,
+          paymentTerms: profile.paymentTerms || '',
+          currency: profile.currency || 'USD',
+          paymentReminders: profile.paymentReminders || false,
+          emailNotifications: profile.emailNotifications !== false,
+          dueDateAlerts: profile.dueDateAlerts !== false,
+          logoUrl: profile.logoUrl || null
+        };
+        console.log('🔧 New settings applied:', newSettings);
+        console.log('🔧 Previous settings:', prevSettings);
+        return newSettings;
+      });
+    } else {
+      console.log('🔧 No profile found, using default settings');
     }
   }, [profile]);
 
@@ -76,7 +105,13 @@ export default function SettingsPage() {
   ];
 
   const handleSave = async () => {
+    console.log('💾 handleSave called');
+    console.log('💾 Current settings state:', settings);
+    console.log('💾 Profile object:', profile);
+    console.log('💾 Profile userId:', profile?.userId);
+    
     if (!profile?.userId) {
+      console.error('❌ No profile or userId found');
       toast.error('Usuario no encontrado');
       return;
     }
@@ -87,8 +122,9 @@ export default function SettingsPage() {
       
       // Subir logo a Backblaze si hay uno
       if (logoFile) {
+        console.log('📤 Uploading logo to Backblaze...');
         logoUrl = await uploadFile(logoFile, `logos/${profile.userId}`);
-        console.log('Logo uploaded to Backblaze:', logoUrl);
+        console.log('✅ Logo uploaded to Backblaze:', logoUrl);
       }
 
       // Guardar configuración en Firebase
@@ -102,13 +138,42 @@ export default function SettingsPage() {
         (settingsData as any).logoUrl = logoUrl;
       }
 
+      console.log('🔥 Saving to Firebase with data:', settingsData);
+      console.log('🔥 Document path: company_profiles/' + profile.userId);
+      console.log('🔥 Settings to save:', {
+        primaryColor: settingsData.primaryColor,
+        secondaryColor: settingsData.secondaryColor,
+        invoiceTemplate: settingsData.invoiceTemplate,
+        emailSignature: settingsData.emailSignature,
+        invoiceEmailTemplate: settingsData.invoiceEmailTemplate,
+        reminderTemplate: settingsData.reminderTemplate,
+        defaultTaxRate: settingsData.defaultTaxRate,
+        defaultPaymentDays: settingsData.defaultPaymentDays,
+        paymentTerms: settingsData.paymentTerms,
+        currency: settingsData.currency,
+        paymentReminders: settingsData.paymentReminders,
+        emailNotifications: settingsData.emailNotifications,
+        dueDateAlerts: settingsData.dueDateAlerts,
+        logoUrl: settingsData.logoUrl
+      });
+      
       await updateDoc(doc(db, 'company_profiles', profile.userId), settingsData);
       
       toast.success('Configuración guardada exitosamente');
-      console.log('Settings saved to Firebase:', settingsData);
+      console.log('✅ Settings saved to Firebase successfully');
+      
+      // Forzar recarga del perfil después de guardar
+      console.log('🔄 Refreshing profile after save...');
+      await refreshProfile();
+      console.log('✅ Profile refreshed after save');
       
     } catch (error) {
-      console.error('Error saving settings:', error);
+      console.error('❌ Error saving settings:', error);
+      console.error('❌ Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        code: (error as any)?.code,
+        stack: error instanceof Error ? error.stack : 'No stack trace'
+      });
       toast.error('Error al guardar la configuración');
     } finally {
       setSaving(false);
@@ -315,6 +380,8 @@ export default function SettingsPage() {
                       rows={4}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Atentamente,&#10;{companyName}&#10;{phone}&#10;{email}"
+                      value={settings.emailSignature}
+                      onChange={(e) => setSettings({...settings, emailSignature: e.target.value})}
                     />
                   </div>
 
@@ -324,6 +391,8 @@ export default function SettingsPage() {
                       rows={6}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Estimado cliente,&#10;&#10;Adjunto encontrará la factura #{invoiceNumber} por un total de ${total}.&#10;&#10;Por favor, proceda con el pago según los términos acordados.&#10;&#10;Gracias por su negocio."
+                      value={settings.invoiceEmailTemplate}
+                      onChange={(e) => setSettings({...settings, invoiceEmailTemplate: e.target.value})}
                     />
                   </div>
 
@@ -333,6 +402,8 @@ export default function SettingsPage() {
                       rows={4}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Estimado cliente,&#10;&#10;Le recordamos que la factura #{invoiceNumber} está próxima a vencer.&#10;&#10;Fecha de vencimiento: {dueDate}&#10;Monto: ${total}"
+                      value={settings.reminderTemplate}
+                      onChange={(e) => setSettings({...settings, reminderTemplate: e.target.value})}
                     />
                   </div>
                 </div>
@@ -351,7 +422,8 @@ export default function SettingsPage() {
                         type="number" 
                         step="0.01"
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        defaultValue="6.25"
+                        value={settings.defaultTaxRate}
+                        onChange={(e) => setSettings({...settings, defaultTaxRate: parseFloat(e.target.value) || 0})}
                       />
                     </div>
                     <div>
@@ -359,7 +431,8 @@ export default function SettingsPage() {
                       <input 
                         type="number" 
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        defaultValue="30"
+                        value={settings.defaultPaymentDays}
+                        onChange={(e) => setSettings({...settings, defaultPaymentDays: parseInt(e.target.value) || 30})}
                       />
                     </div>
                   </div>
@@ -370,15 +443,21 @@ export default function SettingsPage() {
                       rows={3}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Pago neto 30 días. Se aplicará un cargo del 1.5% mensual por pagos atrasados."
+                      value={settings.paymentTerms}
+                      onChange={(e) => setSettings({...settings, paymentTerms: e.target.value})}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Moneda</label>
-                    <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                      <option>USD ($)</option>
-                      <option>EUR (€)</option>
-                      <option>MXN ($)</option>
+                    <select 
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      value={settings.currency}
+                      onChange={(e) => setSettings({...settings, currency: e.target.value})}
+                    >
+                      <option value="USD">USD ($)</option>
+                      <option value="EUR">EUR (€)</option>
+                      <option value="MXN">MXN ($)</option>
                     </select>
                   </div>
                 </div>
@@ -396,7 +475,12 @@ export default function SettingsPage() {
                       <p className="text-sm text-gray-500">Enviar recordatorios automáticos antes del vencimiento</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" className="sr-only peer" />
+                      <input 
+                        type="checkbox" 
+                        className="sr-only peer" 
+                        checked={settings.paymentReminders}
+                        onChange={(e) => setSettings({...settings, paymentReminders: e.target.checked})}
+                      />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -407,7 +491,12 @@ export default function SettingsPage() {
                       <p className="text-sm text-gray-500">Recibir notificaciones por email sobre actividad importante</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" className="sr-only peer" defaultChecked />
+                      <input 
+                        type="checkbox" 
+                        className="sr-only peer" 
+                        checked={settings.emailNotifications}
+                        onChange={(e) => setSettings({...settings, emailNotifications: e.target.checked})}
+                      />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -418,7 +507,12 @@ export default function SettingsPage() {
                       <p className="text-sm text-gray-500">Notificar cuando las facturas estén próximas a vencer</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" className="sr-only peer" defaultChecked />
+                      <input 
+                        type="checkbox" 
+                        className="sr-only peer" 
+                        checked={settings.dueDateAlerts}
+                        onChange={(e) => setSettings({...settings, dueDateAlerts: e.target.checked})}
+                      />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>

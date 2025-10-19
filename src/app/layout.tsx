@@ -12,6 +12,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "ContractorApp - Gestión Profesional para Contratistas",
   description: "Sistema integral de gestión para contratistas. Maneja proyectos, presupuestos, facturas y más.",
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({

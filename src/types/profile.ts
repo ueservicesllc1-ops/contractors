@@ -47,6 +47,22 @@ export interface CompanyProfile {
   isPremium: boolean;
   subscriptionType: 'free' | 'premium' | 'enterprise';
   
+  // Settings
+  primaryColor?: string;
+  secondaryColor?: string;
+  invoiceTemplate?: string;
+  emailSignature?: string;
+  invoiceEmailTemplate?: string;
+  reminderTemplate?: string;
+  defaultTaxRate?: number;
+  defaultPaymentDays?: number;
+  paymentTerms?: string;
+  currency?: string;
+  paymentReminders?: boolean;
+  emailNotifications?: boolean;
+  dueDateAlerts?: boolean;
+  logoUrl?: string | null;
+  
   // Timestamps
   createdAt: Date;
   updatedAt: Date;
