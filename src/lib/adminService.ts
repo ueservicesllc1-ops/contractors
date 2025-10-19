@@ -84,17 +84,17 @@ export class AdminService {
         updatedAt: new Date()
       });
 
-      // También actualizar en la colección 'profiles' si existe
+      // También actualizar en la colección 'company_profiles' si existe
       try {
-        const profileRef = doc(db, 'profiles', userId);
+        const profileRef = doc(db, 'company_profiles', userId);
         await updateDoc(profileRef, {
           isPremium: subscriptionType !== 'free',
           subscriptionType,
           updatedAt: new Date()
         });
-        console.log(`✅ Profile ${userId} subscription updated to ${subscriptionType}`);
+        console.log(`✅ Company Profile ${userId} subscription updated to ${subscriptionType}`);
       } catch (profileError) {
-        console.log('Profile not found, only user updated');
+        console.log('Company Profile not found, only user updated');
       }
 
       console.log(`✅ User ${userId} subscription updated to ${subscriptionType}`);
