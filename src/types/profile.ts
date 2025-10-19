@@ -40,7 +40,7 @@ export interface CompanyProfile {
   njLicenseExpiry?: Date;
   
   // Profile Completion
-  isProfileComplete: boolean;
+  isComplete: boolean;
   profileCompletionDate?: Date;
   
   // Timestamps
