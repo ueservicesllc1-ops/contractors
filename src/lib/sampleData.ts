@@ -118,7 +118,7 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     description: 'Desarrollo de 50 viviendas sociales con áreas comunes',
     projectNumber: 'PROJ-2025-004',
     clientId: '', // Se asignará dinámicamente
-    status: 'onHold',
+    status: 'on-hold',
     startDate: new Date('2025-03-01'),
     endDate: new Date('2025-11-30'),
     estimatedCost: 1200000,
