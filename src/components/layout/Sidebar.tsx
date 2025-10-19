@@ -21,29 +21,17 @@ import {
   ShieldCheckIcon,
 } from '@heroicons/react/24/outline';
 
-const getNavigation = (t: (key: string) => string, isAdmin: boolean = false) => {
-  const baseNavigation = [
-    { name: t('navigation.dashboard'), href: '/dashboard', icon: HomeIcon },
-    { name: t('navigation.projects'), href: '/projects', icon: FolderIcon },
-    { name: t('navigation.clients'), href: '/clients', icon: UsersIcon },
-    { name: t('navigation.estimates'), href: '/estimates', icon: CalculatorIcon },
-    { name: t('navigation.invoices'), href: '/invoices', icon: DocumentTextIcon },
-    { name: t('navigation.purchases'), href: '/purchases', icon: ShoppingCartIcon },
-    { name: t('navigation.changeOrders'), href: '/change-orders', icon: ClipboardDocumentListIcon },
-    { name: t('navigation.reports'), href: '/reports', icon: ChartBarIcon },
-    { name: t('navigation.settings'), href: '/settings', icon: CogIcon },
-  ];
-
-  if (isAdmin) {
-    baseNavigation.push({
-      name: 'Administración',
-      href: '/admin',
-      icon: ShieldCheckIcon,
-    });
-  }
-
-  return baseNavigation;
-};
+const getNavigation = (t: (key: string) => string) => [
+  { name: t('navigation.dashboard'), href: '/dashboard', icon: HomeIcon },
+  { name: t('navigation.projects'), href: '/projects', icon: FolderIcon },
+  { name: t('navigation.clients'), href: '/clients', icon: UsersIcon },
+  { name: t('navigation.estimates'), href: '/estimates', icon: CalculatorIcon },
+  { name: t('navigation.invoices'), href: '/invoices', icon: DocumentTextIcon },
+  { name: t('navigation.purchases'), href: '/purchases', icon: ShoppingCartIcon },
+  { name: t('navigation.changeOrders'), href: '/change-orders', icon: ClipboardDocumentListIcon },
+  { name: t('navigation.reports'), href: '/reports', icon: ChartBarIcon },
+  { name: t('navigation.settings'), href: '/settings', icon: CogIcon },
+];
 
 interface SidebarProps {
   className?: string;
@@ -54,9 +42,7 @@ export default function Sidebar({ className }: SidebarProps) {
   const { theme } = useTheme();
   const { t } = useLanguage();
   
-  // TODO: Implement proper admin check - for now, hardcode for testing
-  const isAdmin = true; // This should come from user context or auth
-  const navigation = getNavigation(t, isAdmin);
+  const navigation = getNavigation(t);
 
   return (
     <div className={cn('flex h-full w-64 flex-col bg-gray-900 dark:bg-gray-800', className)}>

@@ -1,12 +1,13 @@
 'use client';
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { BellIcon, ChevronDownIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { BellIcon, ChevronDownIcon, UserCircleIcon, ShieldCheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import LanguageSelector from '@/components/LanguageSelector';
 import ThemeSelector from '@/components/ThemeSelector';
@@ -20,6 +21,10 @@ export default function Header() {
   const { user, logout } = useAuth();
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const router = useRouter();
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPin, setAdminPin] = useState('');
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -27,6 +32,29 @@ export default function Header() {
     } catch (error) {
       toast.error('Error al cerrar sesión');
     }
+  };
+
+  const handleAdminAccess = () => {
+    setShowAdminModal(true);
+  };
+
+  const handlePinSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsAuthenticating(true);
+
+    // Simular verificación del PIN
+    setTimeout(() => {
+      if (adminPin === '1619') {
+        toast.success('Acceso autorizado');
+        setShowAdminModal(false);
+        setAdminPin('');
+        router.push('/admin');
+      } else {
+        toast.error('PIN incorrecto');
+        setAdminPin('');
+      }
+      setIsAuthenticating(false);
+    }, 1000);
   };
 
   return (
@@ -50,6 +78,18 @@ export default function Header() {
         <div className="flex items-center gap-x-4 lg:gap-x-6">
           <LanguageSelector />
           <ThemeSelector />
+          
+          {/* Admin Access Button */}
+          <button
+            onClick={handleAdminAccess}
+            type="button"
+            className="-m-2.5 p-2.5 text-gray-400 hover:text-red-500 dark:text-gray-300 dark:hover:text-red-400 transition-colors duration-200"
+            title="Acceso de Administración"
+          >
+            <span className="sr-only">Acceso de Administración</span>
+            <ShieldCheckIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
+          
           {/* Notifications */}
           <button
             type="button"
@@ -115,6 +155,84 @@ export default function Header() {
           </Menu>
         </div>
       </div>
+
+      {/* Admin Access Modal */}
+      {showAdminModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+            <div className="mt-3">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <ShieldCheckIcon className="h-6 w-6 text-red-500 mr-2" />
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    Acceso de Administración
+                  </h3>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowAdminModal(false);
+                    setAdminPin('');
+                  }}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+              
+              <div className="mb-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Ingresa el PIN de administración para acceder al panel de control.
+                </p>
+              </div>
+              
+              <form onSubmit={handlePinSubmit}>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    PIN de Administración
+                  </label>
+                  <input
+                    type="password"
+                    value={adminPin}
+                    onChange={(e) => setAdminPin(e.target.value)}
+                    placeholder="Ingresa el PIN"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100"
+                    autoFocus
+                    disabled={isAuthenticating}
+                  />
+                </div>
+                
+                <div className="flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAdminModal(false);
+                      setAdminPin('');
+                    }}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    disabled={isAuthenticating}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isAuthenticating || !adminPin.trim()}
+                  >
+                    {isAuthenticating ? (
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Verificando...
+                      </div>
+                    ) : (
+                      'Acceder'
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
