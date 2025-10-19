@@ -57,13 +57,13 @@ export default function SettingsPage() {
         invoiceEmailTemplate: '',
         reminderTemplate: '',
         defaultTaxRate: 6.25,
-        defaultPaymentDays: profile.defaultPaymentDays || 30,
-        paymentTerms: profile.paymentTerms || '',
-        currency: profile.currency || 'USD',
-        paymentReminders: profile.paymentReminders || false,
-        emailNotifications: profile.emailNotifications !== false,
-        dueDateAlerts: profile.dueDateAlerts !== false,
-        logoUrl: profile.logoUrl || null
+        defaultPaymentDays: 30,
+        paymentTerms: '',
+        currency: 'USD',
+        paymentReminders: false,
+        emailNotifications: true,
+        dueDateAlerts: true,
+        logoUrl: null
       }));
     }
   }, [profile]);

@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import AppLayout from '@/components/layout/AppLayout';
-import { useAuth } from '@/contexts/AuthContext';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { AdminService, AdminUser } from '@/lib/adminService';
 import TrialHeroModal from '@/components/dashboard/TrialHeroModal';
 import { 
