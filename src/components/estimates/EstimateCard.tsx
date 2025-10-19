@@ -36,10 +36,10 @@ const statusColors = {
 };
 
 const getStatusLabels = (t: (key: string) => string) => ({
-  draft: t('estimate.status.draft') || 'Borrador',
-  sent: t('estimate.status.sent') || 'Enviado',
-  approved: t('estimate.status.approved') || 'Aprobado',
-  rejected: t('estimate.status.rejected') || 'Rechazado',
+  draft: t('draft') || 'Borrador',
+  sent: t('sent') || 'Enviado',
+  approved: t('approved') || 'Aprobado',
+  rejected: t('rejected') || 'Rechazado',
 });
 
 const statusIcons = {
@@ -143,13 +143,13 @@ export default function EstimateCard({ estimate, projectName, clientName, onDele
         <div className="mt-4 space-y-2">
           {projectName && (
             <div className="flex items-center text-sm text-gray-600">
-              <span className="font-medium">{t('estimate.project') || 'Proyecto'}:</span>
+              <span className="font-medium">{t('project') || 'Proyecto'}:</span>
               <span className="ml-2">{projectName}</span>
             </div>
           )}
           {clientName && (
             <div className="flex items-center text-sm text-gray-600">
-              <span className="font-medium">{t('estimate.client') || 'Cliente'}:</span>
+              <span className="font-medium">{t('client') || 'Cliente'}:</span>
               <span className="ml-2">{clientName}</span>
             </div>
           )}
@@ -168,15 +168,15 @@ export default function EstimateCard({ estimate, projectName, clientName, onDele
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div>
-              <span className="text-gray-500">{t('estimate.subtotal') || 'Subtotal'}:</span>
+              <span className="text-gray-500">{t('subtotal') || 'Subtotal'}:</span>
               <p className="font-medium text-gray-900">{formatCurrency(estimate.subtotal)}</p>
             </div>
             <div>
-              <span className="text-gray-500">{t('estimate.tax') || 'Impuestos'}:</span>
+              <span className="text-gray-500">{t('tax') || 'Impuestos'}:</span>
               <p className="font-medium text-gray-900">{formatCurrency(estimate.tax)}</p>
             </div>
             <div>
-              <span className="text-gray-500">{t('estimate.total') || 'Total'}:</span>
+              <span className="text-gray-500">{t('total') || 'Total'}:</span>
               <p className="font-bold text-gray-900">{formatCurrency(estimate.total)}</p>
             </div>
           </div>
@@ -206,8 +206,8 @@ export default function EstimateCard({ estimate, projectName, clientName, onDele
         {/* Dates */}
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="flex justify-between text-xs text-gray-500">
-            <span>{t('estimate.created') || 'Creado'}: {formatShortDate(estimate.createdAt)}</span>
-            <span>{t('estimate.validUntil') || 'Válido hasta'}: {formatShortDate(estimate.validUntil)}</span>
+            <span>{t('created') || 'Creado'}: {formatShortDate(estimate.createdAt)}</span>
+            <span>{t('validUntil') || 'Válido hasta'}: {formatShortDate(estimate.validUntil)}</span>
           </div>
         </div>
 

@@ -21,7 +21,7 @@ interface StatsCardsProps {
 
 const getStats = (t: (key: string) => string) => [
   {
-    name: t('dashboard.totalProjects') || 'Total Proyectos',
+    name: t('totalProjects') || 'Total Proyectos',
     value: '0',
     icon: FolderIcon,
     change: '',
@@ -29,7 +29,7 @@ const getStats = (t: (key: string) => string) => [
     color: 'bg-blue-500',
   },
   {
-    name: t('dashboard.activeProjects') || 'Proyectos Activos',
+    name: t('activeProjects') || 'Proyectos Activos',
     value: '0',
     icon: ClockIcon,
     change: '',
@@ -37,7 +37,7 @@ const getStats = (t: (key: string) => string) => [
     color: 'bg-green-500',
   },
   {
-    name: t('dashboard.totalRevenue') || 'Ingresos Totales',
+    name: t('totalRevenue') || 'Ingresos Totales',
     value: '$0',
     icon: CurrencyDollarIcon,
     change: '',
@@ -45,7 +45,7 @@ const getStats = (t: (key: string) => string) => [
     color: 'bg-yellow-500',
   },
   {
-    name: t('dashboard.pendingInvoices') || 'Facturas Pendientes',
+    name: t('pendingInvoices') || 'Facturas Pendientes',
     value: '0',
     icon: ExclamationTriangleIcon,
     change: '',

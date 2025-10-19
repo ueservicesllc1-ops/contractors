@@ -127,8 +127,8 @@ export default function InvoicesPage() {
             Dashboard
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{t('navigation.invoices') || 'Facturas'}</h1>
-            <p className="text-gray-600">{t('invoices.manageInvoices') || 'Gestiona tus facturas y pagos'}</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t('invoices') || 'Facturas'}</h1>
+            <p className="text-gray-600">{t('manageInvoices') || 'Gestiona tus facturas y pagos'}</p>
           </div>
         </div>
         <div className="flex space-x-3">
@@ -138,14 +138,14 @@ export default function InvoicesPage() {
             className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
           >
             <ArrowPathIcon className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-            {refreshing ? (t('common.updating') || 'Actualizando...') : (t('common.refresh') || 'Actualizar')}
+            {refreshing ? (t('updating') || 'Actualizando...') : (t('refresh') || 'Actualizar')}
           </button>
           <Link
             href="/invoices/new"
             className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             <PlusIcon className="h-4 w-4 mr-2" />
-            {t('invoices.newInvoice') || 'Nueva Factura'}
+            {t('newInvoice') || 'Nueva Factura'}
           </Link>
         </div>
       </div>
@@ -160,7 +160,7 @@ export default function InvoicesPage() {
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">{t('invoices.totalInvoices') || 'Total Facturas'}</p>
+              <p className="text-sm font-medium text-gray-500">{t('totalInvoices') || 'Total Facturas'}</p>
               <p className="text-2xl font-semibold text-gray-900">{invoices.length}</p>
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function InvoicesPage() {
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">{t('invoices.totalBilled') || 'Total Facturado'}</p>
+              <p className="text-sm font-medium text-gray-500">{t('totalBilled') || 'Total Facturado'}</p>
               <p className="text-2xl font-semibold text-gray-900">
                 {formatCurrency(invoices.reduce((sum, inv) => sum + inv.total, 0))}
               </p>
@@ -190,7 +190,7 @@ export default function InvoicesPage() {
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">{t('invoices.pending') || 'Pendientes'}</p>
+              <p className="text-sm font-medium text-gray-500">{t('pending') || 'Pendientes'}</p>
               <p className="text-2xl font-semibold text-gray-900">
                 {invoices.filter(inv => inv.status === 'sent').length}
               </p>
@@ -206,7 +206,7 @@ export default function InvoicesPage() {
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">{t('invoices.overdue') || 'Vencidas'}</p>
+              <p className="text-sm font-medium text-gray-500">{t('overdue') || 'Vencidas'}</p>
               <p className="text-2xl font-semibold text-gray-900">
                 {invoices.filter(inv => inv.status === 'overdue' || (inv.status === 'sent' && isInvoiceOverdue(inv.dueDate))).length}
               </p>
@@ -220,13 +220,13 @@ export default function InvoicesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="sm:col-span-2 lg:col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('common.search') || 'Buscar'}
+              {t('search') || 'Buscar'}
             </label>
             <div className="relative">
               <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder={t('invoices.searchPlaceholder') || 'Número, cliente, proyecto...'}
+                placeholder={t('searchPlaceholder') || 'Número, cliente, proyecto...'}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"
@@ -243,7 +243,7 @@ export default function InvoicesPage() {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="all">{t('invoices.allStatuses') || 'Todos los estados'}</option>
+              <option value="all">{t('allStatuses') || 'Todos los estados'}</option>
               <option value="draft">{t('invoice.status.draft') || 'Borrador'}</option>
               <option value="sent">{t('invoice.status.sent') || 'Enviada'}</option>
               <option value="paid">{t('invoice.status.paid') || 'Pagada'}</option>
@@ -254,14 +254,14 @@ export default function InvoicesPage() {
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('common.type') || 'Tipo'}
+              {t('type') || 'Tipo'}
             </label>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="all">{t('invoices.allTypes') || 'Todos los tipos'}</option>
+              <option value="all">{t('allTypes') || 'Todos los tipos'}</option>
               <option value="progress">{t('invoice.type.progress') || 'Progreso'}</option>
               <option value="final">{t('invoice.type.final') || 'Final'}</option>
               <option value="change_order">{t('invoice.type.changeOrder') || 'Orden de Cambio'}</option>
@@ -280,7 +280,7 @@ export default function InvoicesPage() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t('invoices.invoice') || 'Factura'}
+                    {t('invoice') || 'Factura'}
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t('common.client') || 'Cliente'}

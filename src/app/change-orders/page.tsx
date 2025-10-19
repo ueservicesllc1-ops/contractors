@@ -111,10 +111,10 @@ export default function ChangeOrdersPage() {
   // Obtener texto del estado
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'pending': return t('changeOrder.status.pending') || 'Pendiente';
-      case 'approved': return t('changeOrder.status.approved') || 'Aprobado';
-      case 'declined': return t('changeOrder.status.declined') || 'Rechazado';
-      case 'expired': return t('changeOrder.status.expired') || 'Expirado';
+      case 'pending': return t('pending') || 'Pendiente';
+      case 'approved': return t('approved') || 'Aprobado';
+      case 'declined': return t('declined') || 'Rechazado';
+      case 'expired': return t('expired') || 'Expirado';
       default: return status;
     }
   };
@@ -140,7 +140,7 @@ export default function ChangeOrdersPage() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{t('navigation.changeOrders') || 'Órdenes de Cambio'}</h1>
               <p className="mt-1 text-sm text-gray-500">
-                {t('changeOrders.manageChangeOrders') || 'Gestiona las modificaciones a tus proyectos'}
+                {t('manageChangeOrders') || 'Gestiona las modificaciones a tus proyectos'}
               </p>
             </div>
             <Link
@@ -148,7 +148,7 @@ export default function ChangeOrdersPage() {
               className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <PlusIcon className="h-4 w-4 mr-2" />
-              {t('changeOrders.newChangeOrder') || 'Nueva Orden de Cambio'}
+              {t('newChangeOrder') || 'Nueva Orden de Cambio'}
             </Link>
           </div>
 
@@ -156,7 +156,7 @@ export default function ChangeOrdersPage() {
           <div className="bg-white shadow rounded-lg p-6">
             <div className="max-w-md">
               <label htmlFor="search" className="block text-sm font-medium text-gray-700">
-                {t('changeOrders.searchChangeOrders') || 'Buscar órdenes de cambio'}
+                {t('searchChangeOrders') || 'Buscar órdenes de cambio'}
               </label>
               <input
                 type="text"
@@ -164,7 +164,7 @@ export default function ChangeOrdersPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder={t('changeOrders.searchPlaceholder') || 'Buscar por título, proyecto, cliente o número...'}
+                placeholder={t('searchPlaceholder') || 'Buscar por título, proyecto, cliente o número...'}
               />
             </div>
           </div>
@@ -187,7 +187,7 @@ export default function ChangeOrdersPage() {
                       className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                     >
                       <PlusIcon className="h-4 w-4 mr-2" />
-                      {t('changeOrders.newChangeOrder') || 'Nueva Orden de Cambio'}
+                      {t('newChangeOrder') || 'Nueva Orden de Cambio'}
                     </Link>
                   </div>
                 )}
@@ -198,7 +198,7 @@ export default function ChangeOrdersPage() {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        {t('changeOrders.changeOrder') || 'Orden de Cambio'}
+                        {t('changeOrder') || 'Orden de Cambio'}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {t('common.project') || 'Proyecto'}
@@ -207,7 +207,7 @@ export default function ChangeOrdersPage() {
                         {t('common.client') || 'Cliente'}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        {t('changeOrders.amount') || 'Monto'}
+                        {t('amount') || 'Monto'}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {t('common.status') || 'Estado'}
@@ -303,7 +303,7 @@ export default function ChangeOrdersPage() {
                 </div>
                 <div className="mt-2 text-center">
                   <h3 className="text-lg font-medium text-gray-900">
-                    {t('changeOrders.approvalLink') || 'Enlace de Aprobación'}
+                    {t('approvalLink') || 'Enlace de Aprobación'}
                   </h3>
                   <div className="mt-2 px-7 py-3">
                     <p className="text-sm text-gray-500">
@@ -313,7 +313,7 @@ export default function ChangeOrdersPage() {
                       <strong>{t('common.project') || 'Proyecto'}:</strong> {selectedOrder.projectName}
                     </p>
                     <p className="text-sm text-gray-500">
-                      <strong>{t('changeOrders.amount') || 'Monto'}:</strong> {formatCurrency(selectedOrder.changeAmount)}
+                      <strong>{t('amount') || 'Monto'}:</strong> {formatCurrency(selectedOrder.changeAmount)}
                     </p>
                   </div>
                 </div>
@@ -322,7 +322,7 @@ export default function ChangeOrdersPage() {
                     onClick={copyLink}
                     className="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
-                    📋 {t('changeOrders.copyLink') || 'Copiar Enlace'}
+                    📋 {t('copyLink') || 'Copiar Enlace'}
                   </button>
                 </div>
                 <div className="mt-3">

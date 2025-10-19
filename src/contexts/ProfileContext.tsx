@@ -146,7 +146,12 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    fetchProfile();
+    if (user) {
+      fetchProfile();
+    } else {
+      setProfile(null);
+      setLoading(false);
+    }
   }, [user]);
 
   const value = {

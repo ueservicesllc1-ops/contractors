@@ -7,10 +7,11 @@ import StatsCards from '@/components/dashboard/StatsCards';
 import RecentProjects from '@/components/dashboard/RecentProjects';
 import QuickActions from '@/components/dashboard/QuickActions';
 import InvoiceStats from '@/components/dashboard/InvoiceStats';
+import TrialHeroModal from '@/components/dashboard/TrialHeroModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { CrownIcon } from '@heroicons/react/24/solid';
+import { StarIcon } from '@heroicons/react/24/solid';
 import { ProjectService } from '@/lib/projectService';
 import { InvoiceService } from '@/lib/invoiceService';
 import { EstimateService } from '@/lib/estimateService';
@@ -30,6 +31,7 @@ export default function DashboardPage() {
   const [recentProjects, setRecentProjects] = useState<Project[]>([]);
   const [recentInvoices, setRecentInvoices] = useState<Invoice[]>([]);
   const [recentEstimates, setRecentEstimates] = useState<Estimate[]>([]);
+  const [showTrialModal, setShowTrialModal] = useState(false);
 
   useEffect(() => {
     const loadDashboardData = async () => {
@@ -74,6 +76,16 @@ export default function DashboardPage() {
     loadDashboardData();
   }, [user, profile?.userId]);
 
+  // Mostrar modal de prueba para usuarios no premium
+  useEffect(() => {
+    if (profile && !loading) {
+      const isNonPremium = profile.subscriptionType === 'free' || profile.subscriptionType === 'enterprise';
+      if (isNonPremium) {
+        setShowTrialModal(true);
+      }
+    }
+  }, [profile, loading]);
+
   if (loading) {
     return (
       <ProtectedRoute>
@@ -100,7 +112,7 @@ export default function DashboardPage() {
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
                 {isPremium && (
                   <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full">
-                    <CrownIcon className="h-5 w-5" />
+                    <StarIcon className="h-5 w-5" />
                     <span className="text-sm font-medium">
                       {subscriptionType === 'enterprise' ? 'Enterprise' : 'Premium'}
                     </span>
@@ -108,7 +120,7 @@ export default function DashboardPage() {
                 )}
               </div>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                {t('dashboard.description') || 'Resumen general de tus proyectos y actividades'}
+                {t('description') || 'Resumen general de tus proyectos y actividades'}
               </p>
             </div>
           </div>
@@ -159,6 +171,13 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+        
+        {/* Trial Hero Modal */}
+        <TrialHeroModal
+          isOpen={showTrialModal}
+          onClose={() => setShowTrialModal(false)}
+          userType={profile?.subscriptionType || 'free'}
+        />
       </AppLayout>
     </ProtectedRoute>
   );

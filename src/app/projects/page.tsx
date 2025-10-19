@@ -74,9 +74,9 @@ export default function ProjectsPage() {
           {/* Page header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{t('navigation.projects') || 'Proyectos'}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t('projects') || 'Proyectos'}</h1>
               <p className="mt-1 text-sm text-gray-500">
-                {t('projects.manageProjects') || 'Gestiona todos tus proyectos de construcción'}
+                {t('manageProjects') || 'Gestiona todos tus proyectos de construcción'}
               </p>
             </div>
             <Link
@@ -84,7 +84,7 @@ export default function ProjectsPage() {
               className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
-              {t('projects.newProject') || 'Nuevo Proyecto'}
+              {t('newProject') || 'Nuevo Proyecto'}
             </Link>
           </div>
 
@@ -98,7 +98,7 @@ export default function ProjectsPage() {
                   </div>
                   <input
                     type="text"
-                    placeholder={t('projects.searchPlaceholder') || 'Buscar proyectos...'}
+                    placeholder={t('searchPlaceholder') || 'Buscar proyectos...'}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -111,12 +111,12 @@ export default function ProjectsPage() {
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 >
-                  <option value="all">{t('projects.allStatuses') || 'Todos los estados'}</option>
-                  <option value="planning">{t('project.status.planning') || 'Planificación'}</option>
-                  <option value="active">{t('project.status.active') || 'Activo'}</option>
-                  <option value="on-hold">{t('project.status.onHold') || 'En Pausa'}</option>
-                  <option value="completed">{t('project.status.completed') || 'Completado'}</option>
-                  <option value="cancelled">{t('project.status.cancelled') || 'Cancelado'}</option>
+                  <option value="all">{t('allStatuses') || 'Todos los estados'}</option>
+                  <option value="planning">{t('planning') || 'Planificación'}</option>
+                  <option value="active">{t('active') || 'Activo'}</option>
+                  <option value="on-hold">{t('onHold') || 'En Pausa'}</option>
+                  <option value="completed">{t('completed') || 'Completado'}</option>
+                  <option value="cancelled">{t('cancelled') || 'Cancelado'}</option>
                 </select>
               </div>
             </div>
@@ -143,7 +143,7 @@ export default function ProjectsPage() {
                     className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                   >
                     <PlusIcon className="h-5 w-5 mr-2" />
-                    {t('projects.newProject') || 'Nuevo Proyecto'}
+                    {t('newProject') || 'Nuevo Proyecto'}
                   </Link>
                 </div>
               )}

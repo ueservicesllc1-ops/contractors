@@ -3,6 +3,7 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import Footer from './Footer';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100 dark:bg-gray-900">
+    <div className="h-screen flex overflow-hidden bg-gray-100">
       {/* Sidebar */}
       <Sidebar className="hidden lg:flex lg:flex-shrink-0" />
       
@@ -20,13 +21,16 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <Header />
         
         {/* Page content */}
-        <main className="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50 dark:bg-gray-900">
+        <main className="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50">
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               {children}
             </div>
           </div>
         </main>
+        
+        {/* Footer */}
+        <Footer />
       </div>
     </div>
   );

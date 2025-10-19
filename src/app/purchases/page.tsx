@@ -13,11 +13,11 @@ import { formatCurrency, formatDate } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 const getCategoryLabels = (t: (key: string) => string) => ({
-  materials: t('purchase.category.materials') || 'Materiales',
-  equipment: t('purchase.category.equipment') || 'Equipos',
-  labor: t('purchase.category.labor') || 'Mano de Obra',
-  permits: t('purchase.category.permits') || 'Permisos',
-  other: t('purchase.category.other') || 'Otros',
+  materials: t('materials') || 'Materiales',
+  equipment: t('equipment') || 'Equipos',
+  labor: t('labor') || 'Mano de Obra',
+  permits: t('permits') || 'Permisos',
+  other: t('other') || 'Otros',
 });
 
 export default function PurchasesPage() {
@@ -94,7 +94,7 @@ export default function PurchasesPage() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{t('navigation.purchases') || 'Compras y Gastos'}</h1>
               <p className="mt-1 text-sm text-gray-500">
-                {t('purchases.managePurchases') || 'Registra y gestiona tus compras y gastos del proyecto'}
+                {t('managePurchases') || 'Registra y gestiona tus compras y gastos del proyecto'}
               </p>
             </div>
             <Link
@@ -102,7 +102,7 @@ export default function PurchasesPage() {
               className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
-              {t('purchases.newPurchase') || 'Nueva Compra'}
+              {t('newPurchase') || 'Nueva Compra'}
             </Link>
           </div>
 
@@ -114,7 +114,7 @@ export default function PurchasesPage() {
               </div>
               <input
                 type="text"
-                placeholder={t('purchases.searchPlaceholder') || 'Buscar compras...'}
+                placeholder={t('searchPlaceholder') || 'Buscar compras...'}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -127,12 +127,12 @@ export default function PurchasesPage() {
             <div className="text-center py-12">
               <ShoppingCartIcon className="mx-auto h-16 w-16 text-gray-400" />
               <h3 className="mt-4 text-lg font-medium text-gray-900">
-                {searchTerm ? (t('purchases.noResults') || 'No se encontraron compras') : (t('purchases.noPurchases') || 'No hay compras registradas')}
+                {searchTerm ? (t('noResults') || 'No se encontraron compras') : (t('noPurchases') || 'No hay compras registradas')}
               </h3>
               <p className="mt-2 text-sm text-gray-500">
                 {searchTerm
-                  ? (t('purchases.tryOtherTerms') || 'Intenta con otros términos de búsqueda.')
-                  : (t('purchases.startRecording') || 'Comienza registrando tu primera compra.')}
+                  ? (t('tryOtherTerms') || 'Intenta con otros términos de búsqueda.')
+                  : (t('startRecording') || 'Comienza registrando tu primera compra.')}
               </p>
               {!searchTerm && (
                 <div className="mt-6">
@@ -141,7 +141,7 @@ export default function PurchasesPage() {
                     className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                   >
                     <PlusIcon className="h-5 w-5 mr-2" />
-                    {t('purchases.newPurchase') || 'Nueva Compra'}
+                    {t('newPurchase') || 'Nueva Compra'}
                   </Link>
                 </div>
               )}

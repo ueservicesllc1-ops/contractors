@@ -207,11 +207,11 @@ export default function EstimateForm({
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-8">
       {/* Basic Information */}
       <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">{t('estimate.title')} - {t('form.description')}</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">{t('title')} - {t('description')}</h3>
         
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700">{t('estimate.name')} *</label>
+            <label className="block text-sm font-medium text-gray-700">{t('name')} *</label>
             <input
               {...register('name')}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -221,7 +221,7 @@ export default function EstimateForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">{t('estimate.client')} *</label>
+            <label className="block text-sm font-medium text-gray-700">{t('client')} *</label>
             <div className="flex gap-2">
               <select
                 {...register('clientId')}
@@ -246,7 +246,7 @@ export default function EstimateForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">{t('estimate.project')} *</label>
+            <label className="block text-sm font-medium text-gray-700">{t('project')} *</label>
             <div className="flex gap-2">
               <select
                 {...register('projectId')}
@@ -308,8 +308,8 @@ export default function EstimateForm({
       <div className="bg-white shadow rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">{t('estimate.items')}</h3>
-            <p className="text-sm text-gray-500">{t('estimate.addItemsDescription')}</p>
+            <h3 className="text-lg font-medium text-gray-900">{t('items')}</h3>
+            <p className="text-sm text-gray-500">{t('addItemsDescription')}</p>
           </div>
           <button
             type="button"
@@ -317,33 +317,33 @@ export default function EstimateForm({
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             <PlusIcon className="h-4 w-4 mr-2" />
-            {t('estimate.addItem')}
+            {t('addItem')}
           </button>
         </div>
 
         {items.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             <CalculatorIcon className="h-12 w-12 mx-auto mb-2" />
-            <p>{t('estimate.noItems')}</p>
-            <p className="text-sm">{t('estimate.clickToAdd')}</p>
+            <p>{t('noItems')}</p>
+            <p className="text-sm">{t('clickToAdd')}</p>
           </div>
         ) : (
           <div className="space-y-3">
             {items.map((item) => (
               <div key={item.id} className="grid grid-cols-12 gap-4 items-end p-3 bg-slate-50 rounded-md border border-slate-200">
                 <div className="col-span-4">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('estimate.description')}</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('description')}</label>
                   <input
                     type="text"
                     value={item.description}
                     onChange={(e) => updateItem(item.id, { description: e.target.value })}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-                    placeholder={t('estimate.description')}
+                    placeholder={t('description')}
                   />
                 </div>
 
                 <div className="col-span-1">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('estimate.quantity')}</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('quantity')}</label>
                   <input
                     type="number"
                     step="0.01"
@@ -354,7 +354,7 @@ export default function EstimateForm({
                 </div>
 
                 <div className="col-span-1">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('estimate.unit')}</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('unit')}</label>
                   <select
                     value={item.unit}
                     onChange={(e) => updateItem(item.id, { unit: e.target.value })}
@@ -367,7 +367,7 @@ export default function EstimateForm({
                 </div>
 
                 <div className="col-span-2">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('estimate.unitPrice')}</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('unitPrice')}</label>
                   <input
                     type="number"
                     step="0.01"
@@ -379,7 +379,7 @@ export default function EstimateForm({
                 </div>
 
                 <div className="col-span-2">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('estimate.type')}</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('type')}</label>
                   <select
                     value={item.category}
                     onChange={(e) => updateItem(item.id, { category: e.target.value as any })}
@@ -394,7 +394,7 @@ export default function EstimateForm({
                 </div>
 
                 <div className="col-span-1">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('estimate.total')}</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">{t('total')}</label>
                   <div className="block w-full px-3 py-2 bg-slate-100 border border-slate-300 rounded-md text-sm font-medium">
                     {formatCurrency(item.total)}
                   </div>
@@ -417,19 +417,19 @@ export default function EstimateForm({
 
       {/* Totals */}
       <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">{t('estimate.title')} - {t('estimate.grandTotal')}</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">{t('title')} - {t('grandTotal')}</h3>
         
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span>{t('estimate.subtotal')}:</span>
+            <span>{t('subtotal')}:</span>
             <span>{formatCurrency(subtotal)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span>{t('estimate.tax')} ({taxRate}%):</span>
+            <span>{t('tax')} ({taxRate}%):</span>
             <span>{formatCurrency(tax)}</span>
           </div>
           <div className="flex justify-between text-lg font-bold border-t pt-2">
-            <span>{t('estimate.grandTotal')}:</span>
+            <span>{t('grandTotal')}:</span>
             <span>{formatCurrency(total)}</span>
           </div>
         </div>

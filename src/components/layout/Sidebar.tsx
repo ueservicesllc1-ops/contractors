@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Image from 'next/image';
 import {
@@ -39,13 +38,12 @@ interface SidebarProps {
 
 export default function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
-  const { theme } = useTheme();
   const { t } = useLanguage();
   
   const navigation = getNavigation(t);
 
   return (
-    <div className={cn('flex h-full w-64 flex-col bg-gray-900 dark:bg-gray-800', className)}>
+    <div className={cn('flex h-full w-64 flex-col bg-gray-900', className)}>
       {/* Logo */}
       <div className="flex h-16 shrink-0 items-center px-6">
         <Image
@@ -70,13 +68,13 @@ export default function Sidebar({ className }: SidebarProps) {
                     'group flex gap-x-3 rounded-md p-3 text-sm font-semibold leading-6 transition-colors',
                     isActive
                       ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                   )}
                 >
                   <item.icon
                     className={cn(
                       'h-6 w-6 shrink-0',
-                      isActive ? 'text-white' : 'text-gray-400 group-hover:text-white dark:text-gray-400 dark:group-hover:text-white'
+                      isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'
                     )}
                     aria-hidden="true"
                   />

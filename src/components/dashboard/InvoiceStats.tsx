@@ -80,7 +80,7 @@ export default function InvoiceStats() {
     return (
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">{t('dashboard.billingSummary') || 'Resumen de Facturación'}</h2>
+          <h2 className="text-lg font-medium text-gray-900">{t('billingSummary') || 'Resumen de Facturación'}</h2>
         </div>
         <div className="px-6 py-4">
           <div className="flex items-center justify-center h-32">
@@ -95,12 +95,12 @@ export default function InvoiceStats() {
     <div className="bg-white shadow rounded-lg">
       <div className="px-6 py-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium text-gray-900">{t('dashboard.billingSummary') || 'Resumen de Facturación'}</h2>
+          <h2 className="text-lg font-medium text-gray-900">{t('billingSummary') || 'Resumen de Facturación'}</h2>
           <Link
             href="/invoices"
             className="text-sm font-medium text-blue-600 hover:text-blue-500"
           >
-            {t('dashboard.viewAll') || 'Ver todas'}
+            {t('viewAll') || 'Ver todas'}
           </Link>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function InvoiceStats() {
                 <DocumentTextIcon className="h-8 w-8 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-blue-600">{t('invoices.totalInvoices') || 'Total Facturas'}</p>
+                <p className="text-sm font-medium text-blue-600">{t('totalInvoices') || 'Total Facturas'}</p>
                 <p className="text-2xl font-semibold text-blue-900">{stats.totalInvoices}</p>
               </div>
             </div>
@@ -127,7 +127,7 @@ export default function InvoiceStats() {
                 <CurrencyDollarIcon className="h-8 w-8 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-green-600">{t('invoices.totalBilled') || 'Total Facturado'}</p>
+                <p className="text-sm font-medium text-green-600">{t('totalBilled') || 'Total Facturado'}</p>
                 <p className="text-2xl font-semibold text-green-900">{formatCurrency(stats.totalAmount)}</p>
               </div>
             </div>
@@ -140,9 +140,9 @@ export default function InvoiceStats() {
                 <ClockIcon className="h-8 w-8 text-yellow-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-yellow-600">{t('invoices.pending') || 'Pendiente'}</p>
+                <p className="text-sm font-medium text-yellow-600">{t('pending') || 'Pendiente'}</p>
                 <p className="text-2xl font-semibold text-yellow-900">{formatCurrency(stats.pendingAmount)}</p>
-                <p className="text-xs text-yellow-700">{stats.pendingCount} {t('invoices.invoices') || 'facturas'}</p>
+                <p className="text-xs text-yellow-700">{stats.pendingCount} {t('invoices') || 'facturas'}</p>
               </div>
             </div>
           </div>
@@ -154,9 +154,9 @@ export default function InvoiceStats() {
                 <ExclamationTriangleIcon className="h-8 w-8 text-red-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-red-600">{t('invoices.overdue') || 'Vencidas'}</p>
+                <p className="text-sm font-medium text-red-600">{t('overdue') || 'Vencidas'}</p>
                 <p className="text-2xl font-semibold text-red-900">{formatCurrency(stats.overdueAmount)}</p>
-                <p className="text-xs text-red-700">{stats.overdueCount} {t('invoices.invoices') || 'facturas'}</p>
+                <p className="text-xs text-red-700">{stats.overdueCount} {t('invoices') || 'facturas'}</p>
               </div>
             </div>
           </div>

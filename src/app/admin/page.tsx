@@ -6,6 +6,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { AdminService, AdminUser } from '@/lib/adminService';
+import TrialHeroModal from '@/components/dashboard/TrialHeroModal';
 import { 
   UserGroupIcon, 
   CurrencyDollarIcon, 
@@ -29,6 +30,7 @@ export default function AdminPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [showUserModal, setShowUserModal] = useState(false);
+  const [showTrialModal, setShowTrialModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'premium' | 'free'>('all');
   const [stats, setStats] = useState({
@@ -122,6 +124,7 @@ export default function AdminPage() {
     }
   };
 
+
   if (loading) {
     return (
       <ProtectedRoute>
@@ -152,6 +155,16 @@ export default function AdminPage() {
               </p>
             </div>
             <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setShowTrialModal(true)}
+                className="inline-flex items-center px-3 py-2 border border-blue-300 shadow-sm text-sm font-medium rounded-md text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-600 dark:hover:bg-blue-800"
+              >
+                <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Probar Modal
+              </button>
               <button
                 onClick={() => window.location.reload()}
                 className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
@@ -482,6 +495,13 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+
+          {/* Trial Hero Modal for Testing */}
+          <TrialHeroModal
+            isOpen={showTrialModal}
+            onClose={() => setShowTrialModal(false)}
+            userType="free"
+          />
         </div>
       </AppLayout>
     </ProtectedRoute>

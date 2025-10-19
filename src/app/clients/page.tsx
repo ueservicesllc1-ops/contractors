@@ -69,9 +69,9 @@ export default function ClientsPage() {
           {/* Page header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{t('navigation.clients') || 'Clientes'}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t('clients') || 'Clientes'}</h1>
               <p className="mt-1 text-sm text-gray-500">
-                {t('clients.manageClients') || 'Gestiona tu base de datos de clientes'}
+                {t('manageClients') || 'Gestiona tu base de datos de clientes'}
               </p>
             </div>
             <Link
@@ -79,7 +79,7 @@ export default function ClientsPage() {
               className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
-              {t('clients.newClient') || 'Nuevo Cliente'}
+              {t('newClient') || 'Nuevo Cliente'}
             </Link>
           </div>
 
@@ -91,7 +91,7 @@ export default function ClientsPage() {
               </div>
               <input
                 type="text"
-                placeholder={t('clients.searchPlaceholder') || 'Buscar clientes...'}
+                placeholder={t('searchPlaceholder') || 'Buscar clientes...'}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -120,7 +120,7 @@ export default function ClientsPage() {
                     className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                   >
                     <PlusIcon className="h-5 w-5 mr-2" />
-                    {t('clients.newClient') || 'Nuevo Cliente'}
+                    {t('newClient') || 'Nuevo Cliente'}
                   </Link>
                 </div>
               )}
@@ -168,13 +168,13 @@ export default function ClientsPage() {
                         href={`/clients/${client.id}`}
                         className="flex-1 text-center py-2 px-3 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
                       >
-                        {t('common.viewDetails') || 'Ver Detalles'}
+                        {t('viewDetails') || 'Ver Detalles'}
                       </Link>
                       <Link
                         href={`/clients/${client.id}/edit`}
                         className="flex-1 text-center py-2 px-3 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                       >
-                        {t('common.edit') || 'Editar'}
+                        {t('edit') || 'Editar'}
                       </Link>
                     </div>
                   </div>

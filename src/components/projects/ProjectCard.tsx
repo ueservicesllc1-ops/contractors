@@ -25,11 +25,11 @@ const statusColors = {
 };
 
 const getStatusLabels = (t: (key: string) => string) => ({
-  planning: t('project.status.planning') || 'Planificación',
-  active: t('project.status.active') || 'Activo',
-  'on-hold': t('project.status.onHold') || 'En Pausa',
-  completed: t('project.status.completed') || 'Completado',
-  cancelled: t('project.status.cancelled') || 'Cancelado',
+  planning: t('planning') || 'Planificación',
+  active: t('active') || 'Activo',
+  'on-hold': t('onHold') || 'En Pausa',
+  completed: t('completed') || 'Completado',
+  cancelled: t('cancelled') || 'Cancelado',
 });
 
 export default function ProjectCard({ project }: ProjectCardProps) {
@@ -76,9 +76,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </div>
           <div className="flex items-center text-sm text-gray-600">
             <CalendarIcon className="h-4 w-4 mr-2 text-gray-400" />
-            <span>{t('project.startDate') || 'Inicio'}: {formatShortDate(project.startDate)}</span>
+            <span>{t('startDate') || 'Inicio'}: {formatShortDate(project.startDate)}</span>
             {project.endDate && (
-              <span className="ml-4">{t('project.endDate') || 'Fin'}: {formatShortDate(project.endDate)}</span>
+              <span className="ml-4">{t('endDate') || 'Fin'}: {formatShortDate(project.endDate)}</span>
             )}
           </div>
         </div>
@@ -87,13 +87,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="flex justify-between items-center text-sm">
             <div>
-              <span className="text-gray-500">{t('project.budget') || 'Presupuesto'}:</span>
+              <span className="text-gray-500">{t('budget') || 'Presupuesto'}:</span>
               <span className="ml-2 font-medium text-gray-900">
                 {formatCurrency(project.estimatedCost)}
               </span>
             </div>
             <div>
-              <span className="text-gray-500">{t('project.spent') || 'Gastado'}:</span>
+              <span className="text-gray-500">{t('spent') || 'Gastado'}:</span>
               <span className="ml-2 font-medium text-gray-900">
                 {formatCurrency(project.actualCost)}
               </span>
@@ -103,7 +103,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {/* Progress bar */}
           <div className="mt-3">
             <div className="flex justify-between text-xs text-gray-600 mb-1">
-              <span>{t('project.budgetProgress') || 'Progreso del presupuesto'}</span>
+              <span>{t('budgetProgress') || 'Progreso del presupuesto'}</span>
               <span>{progressPercentage.toFixed(1)}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
@@ -135,7 +135,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                       : 'bg-gray-100 text-gray-800'
                   }`}>
                     {phase.status === 'completed' ? 'Completado' :
-                     phase.status === 'in-progress' ? (t('project.inProgress') || 'En Progreso') : (t('project.notStarted') || 'No Iniciado')}
+                     phase.status === 'in-progress' ? (t('inProgress') || 'En Progreso') : (t('notStarted') || 'No Iniciado')}
                   </span>
                 </div>
               ))}
@@ -154,13 +154,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             href={`/projects/${project.id}`}
             className="flex-1 text-center py-2 px-3 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
           >
-            {t('common.viewDetails') || 'Ver Detalles'}
+            {t('viewDetails') || 'Ver Detalles'}
           </Link>
           <Link
             href={`/projects/${project.id}/edit`}
             className="flex-1 text-center py-2 px-3 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
           >
-            {t('common.edit') || 'Editar'}
+            {t('edit') || 'Editar'}
           </Link>
         </div>
       </div>

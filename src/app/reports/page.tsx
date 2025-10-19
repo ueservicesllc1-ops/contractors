@@ -224,7 +224,7 @@ export default function ReportsPage() {
           <div>
               <h1 className="text-2xl font-bold text-gray-900">{t('navigation.reports') || 'Reportes y Analytics'}</h1>
             <p className="mt-1 text-sm text-gray-500">
-                {t('reports.analyzePerformance') || 'Analiza el rendimiento de tus proyectos y la rentabilidad'}
+                {t('analyzePerformance') || 'Analiza el rendimiento de tus proyectos y la rentabilidad'}
               </p>
             </div>
             <div className="flex space-x-2">
@@ -243,7 +243,7 @@ export default function ReportsPage() {
                 className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 no-print"
               >
                 <option value="7d">Últimos 7 días</option>
-                <option value="30d">{t('reports.last30Days') || 'Últimos 30 días'}</option>
+                <option value="30d">{t('last30Days') || 'Últimos 30 días'}</option>
                 <option value="90d">Últimos 90 días</option>
                 <option value="1y">Último año</option>
               </select>
@@ -283,7 +283,7 @@ export default function ReportsPage() {
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
-                        {t('reports.totalRevenue') || 'Ingresos Totales'}
+                        {t('totalRevenue') || 'Ingresos Totales'}
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
                         {formatCurrency(reportData.totalRevenue)}
@@ -304,7 +304,7 @@ export default function ReportsPage() {
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
-                        {t('reports.activeProjects') || 'Proyectos Activos'}
+                        {t('activeProjects') || 'Proyectos Activos'}
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
                         {reportData.activeProjects}
@@ -325,7 +325,7 @@ export default function ReportsPage() {
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
-                        {t('reports.completedProjects') || 'Proyectos Completados'}
+                        {t('completedProjects') || 'Proyectos Completados'}
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
                         {reportData.completedProjects}
@@ -346,7 +346,7 @@ export default function ReportsPage() {
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">
-                        {t('reports.profitMargin') || 'Margen de Ganancia'}
+                        {t('profitMargin') || 'Margen de Ganancia'}
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
                         {reportData.profitMargin.toFixed(1)}%
@@ -364,29 +364,29 @@ export default function ReportsPage() {
             <div className="bg-white shadow rounded-lg">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-                  {t('reports.financialSummary') || 'Resumen Financiero'}
+                  {t('financialSummary') || 'Resumen Financiero'}
                 </h3>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">{t('reports.monthlyRevenue') || 'Ingresos del Mes'}</dt>
+                    <dt className="text-sm font-medium text-gray-500">{t('monthlyRevenue') || 'Ingresos del Mes'}</dt>
                     <dd className="mt-1 text-sm font-semibold text-green-600">
                       {formatCurrency(reportData.monthlyRevenue)}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">{t('reports.paidInvoices') || 'Facturas Pagadas'}</dt>
+                    <dt className="text-sm font-medium text-gray-500">{t('paidInvoices') || 'Facturas Pagadas'}</dt>
                     <dd className="mt-1 text-sm font-semibold text-blue-600">
                       {reportData.paidInvoices}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">{t('reports.pendingInvoices') || 'Facturas Pendientes'}</dt>
+                    <dt className="text-sm font-medium text-gray-500">{t('pendingInvoices') || 'Facturas Pendientes'}</dt>
                     <dd className="mt-1 text-sm font-semibold text-yellow-600">
                       {reportData.pendingInvoices}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">{t('reports.totalProjects') || 'Total Proyectos'}</dt>
+                    <dt className="text-sm font-medium text-gray-500">{t('totalProjects') || 'Total Proyectos'}</dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
                       {reportData.totalProjects}
                     </dd>
@@ -399,23 +399,23 @@ export default function ReportsPage() {
             <div className="bg-white shadow rounded-lg">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-                  {t('reports.changeOrders') || 'Órdenes de Cambio'}
+                  {t('changeOrders') || 'Órdenes de Cambio'}
                 </h3>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">{t('reports.totalOrders') || 'Total Órdenes'}</dt>
+                    <dt className="text-sm font-medium text-gray-500">{t('totalOrders') || 'Total Órdenes'}</dt>
                     <dd className="mt-1 text-sm font-semibold text-gray-900">
                       {reportData.changeOrders}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">{t('reports.approved') || 'Aprobadas'}</dt>
+                    <dt className="text-sm font-medium text-gray-500">{t('approved') || 'Aprobadas'}</dt>
                     <dd className="mt-1 text-sm font-semibold text-green-600">
                       {reportData.approvedChangeOrders}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">{t('reports.approvalRate') || 'Tasa de Aprobación'}</dt>
+                    <dt className="text-sm font-medium text-gray-500">{t('approvalRate') || 'Tasa de Aprobación'}</dt>
                     <dd className="mt-1 text-sm font-semibold text-blue-600">
                       {reportData.changeOrders > 0 
                         ? ((reportData.approvedChangeOrders / reportData.changeOrders) * 100).toFixed(1)
@@ -423,7 +423,7 @@ export default function ReportsPage() {
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">{t('reports.pending') || 'Pendientes'}</dt>
+                    <dt className="text-sm font-medium text-gray-500">{t('pending') || 'Pendientes'}</dt>
                     <dd className="mt-1 text-sm font-semibold text-yellow-600">
                       {reportData.changeOrders - reportData.approvedChangeOrders}
                     </dd>
@@ -437,7 +437,7 @@ export default function ReportsPage() {
           <div className="bg-white shadow rounded-lg">
             <div className="px-4 py-5 sm:p-6">
               <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-                {t('reports.performanceIndicators') || 'Indicadores de Rendimiento'}
+                {t('performanceIndicators') || 'Indicadores de Rendimiento'}
               </h3>
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                 <div className="text-center">
@@ -446,7 +446,7 @@ export default function ReportsPage() {
                       ? ((reportData.completedProjects / reportData.totalProjects) * 100).toFixed(1)
                       : 0}%
                   </div>
-                  <div className="text-sm text-gray-500">{t('reports.completionRate') || 'Tasa de Finalización'}</div>
+                  <div className="text-sm text-gray-500">{t('completionRate') || 'Tasa de Finalización'}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">
@@ -454,7 +454,7 @@ export default function ReportsPage() {
                       ? ((reportData.paidInvoices / (reportData.paidInvoices + reportData.pendingInvoices)) * 100).toFixed(1)
                       : 0}%
                   </div>
-                  <div className="text-sm text-gray-500">{t('reports.collectionRate') || 'Tasa de Cobro'}</div>
+                  <div className="text-sm text-gray-500">{t('collectionRate') || 'Tasa de Cobro'}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-purple-600">
@@ -462,7 +462,7 @@ export default function ReportsPage() {
                       ? ((reportData.approvedChangeOrders / reportData.changeOrders) * 100).toFixed(1)
                       : 0}%
                   </div>
-                  <div className="text-sm text-gray-500">{t('reports.changeApproval') || 'Aprobación de Cambios'}</div>
+                  <div className="text-sm text-gray-500">{t('changeApproval') || 'Aprobación de Cambios'}</div>
                 </div>
               </div>
             </div>

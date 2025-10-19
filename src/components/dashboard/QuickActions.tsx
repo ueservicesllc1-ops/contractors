@@ -15,29 +15,29 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const getQuickActions = (t: (key: string) => string) => [
   {
-    name: t('dashboard.newProject') || 'Nuevo Proyecto',
-    description: t('dashboard.newProjectDesc') || 'Crear un nuevo proyecto de construcción',
+    name: t('newProject') || 'Nuevo Proyecto',
+    description: t('newProjectDesc') || 'Crear un nuevo proyecto de construcción',
     type: 'modal',
     icon: PlusIcon,
     color: 'bg-blue-500',
   },
   {
-    name: t('dashboard.createEstimate') || 'Crear Estimado',
-    description: t('dashboard.createEstimateDesc') || 'Generar un nuevo presupuesto',
+    name: t('createEstimate') || 'Crear Estimado',
+    description: t('createEstimateDesc') || 'Generar un nuevo presupuesto',
     href: '/estimates/new',
     icon: CalculatorIcon,
     color: 'bg-green-500',
   },
   {
-    name: t('dashboard.newInvoice') || 'Nueva Factura',
-    description: t('dashboard.newInvoiceDesc') || 'Crear una factura para el cliente',
+    name: t('newInvoice') || 'Nueva Factura',
+    description: t('newInvoiceDesc') || 'Crear una factura para el cliente',
     href: '/invoices/new',
     icon: DocumentTextIcon,
     color: 'bg-yellow-500',
   },
   {
-    name: t('dashboard.addClient') || 'Agregar Cliente',
-    description: t('dashboard.addClientDesc') || 'Registrar un nuevo cliente',
+    name: t('addClient') || 'Agregar Cliente',
+    description: t('addClientDesc') || 'Registrar un nuevo cliente',
     type: 'modal',
     icon: UserGroupIcon,
     color: 'bg-purple-500',
@@ -53,7 +53,7 @@ export default function QuickActions() {
     <div className="bg-white shadow rounded-lg">
       <div className="px-4 py-5 sm:p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">
-          {t('dashboard.quickActions') || 'Acciones Rápidas'}
+          {t('quickActions') || 'Acciones Rápidas'}
         </h3>
         
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

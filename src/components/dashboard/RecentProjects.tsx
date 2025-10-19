@@ -19,11 +19,11 @@ const statusColors = {
 };
 
 const getStatusLabels = (t: (key: string) => string) => ({
-  planning: t('project.status.planning') || 'Planificación',
-  active: t('project.status.active') || 'Activo',
-  'on-hold': t('project.status.onHold') || 'En Pausa',
-  completed: t('project.status.completed') || 'Completado',
-  cancelled: t('project.status.cancelled') || 'Cancelado',
+  planning: t('planning') || 'Planificación',
+  active: t('active') || 'Activo',
+  'on-hold': t('onHold') || 'En Pausa',
+  completed: t('completed') || 'Completado',
+  cancelled: t('cancelled') || 'Cancelado',
 });
 
 export default function RecentProjects({ projects }: RecentProjectsProps) {
@@ -35,7 +35,7 @@ export default function RecentProjects({ projects }: RecentProjectsProps) {
     <div className="bg-white shadow rounded-lg">
       <div className="px-4 py-5 sm:p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">
-          {t('dashboard.recentProjects') || 'Proyectos Recientes'}
+          {t('recentProjects') || 'Proyectos Recientes'}
         </h3>
         
         {recentProjects.length === 0 ? (
@@ -98,7 +98,7 @@ export default function RecentProjects({ projects }: RecentProjectsProps) {
                       <p className="text-sm font-medium text-gray-900">
                         ${project.estimatedCost.toLocaleString()}
                       </p>
-                      <p className="text-xs text-gray-500">{t('project.budget') || 'Presupuesto'}</p>
+                      <p className="text-xs text-gray-500">{t('budget') || 'Presupuesto'}</p>
                     </div>
                   </div>
                 </li>
@@ -113,7 +113,7 @@ export default function RecentProjects({ projects }: RecentProjectsProps) {
               href="/projects"
               className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
             >
-              {t('dashboard.viewAllProjects') || 'Ver todos los proyectos'}
+              {t('viewAllProjects') || 'Ver todos los proyectos'}
             </Link>
           </div>
         )}
