@@ -5,6 +5,7 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import AppLayout from '@/components/layout/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { AdminService, AdminUser } from '@/lib/adminService';
 import { 
   UserGroupIcon, 
   CurrencyDollarIcon, 
@@ -21,79 +22,49 @@ import {
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  companyName: string;
-  isPremium: boolean;
-  subscriptionType: 'free' | 'premium' | 'enterprise';
-  createdAt: Date;
-  lastLogin: Date;
-  totalProjects: number;
-  totalInvoices: number;
-  totalRevenue: number;
-}
-
 export default function AdminPage() {
   const { user } = useAuth();
   const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<User[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [showUserModal, setShowUserModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'premium' | 'free'>('all');
-
-  // Mock data - En producción esto vendría de una API de admin
-  const mockUsers: User[] = [
-    {
-      id: '1',
-      email: 'john@contractor.com',
-      name: 'John Smith',
-      companyName: 'Smith Construction',
-      isPremium: true,
-      subscriptionType: 'premium',
-      createdAt: new Date('2024-01-15'),
-      lastLogin: new Date('2024-10-19'),
-      totalProjects: 12,
-      totalInvoices: 45,
-      totalRevenue: 125000
-    },
-    {
-      id: '2',
-      email: 'maria@builders.com',
-      name: 'Maria Garcia',
-      companyName: 'Garcia Builders',
-      isPremium: false,
-      subscriptionType: 'free',
-      createdAt: new Date('2024-03-20'),
-      lastLogin: new Date('2024-10-18'),
-      totalProjects: 5,
-      totalInvoices: 18,
-      totalRevenue: 45000
-    },
-    {
-      id: '3',
-      email: 'mike@construct.com',
-      name: 'Mike Johnson',
-      companyName: 'Johnson Construction',
-      isPremium: true,
-      subscriptionType: 'enterprise',
-      createdAt: new Date('2024-02-10'),
-      lastLogin: new Date('2024-10-19'),
-      totalProjects: 25,
-      totalInvoices: 89,
-      totalRevenue: 350000
-    }
-  ];
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    premiumUsers: 0,
+    freeUsers: 0,
+    totalRevenue: 0
+  });
 
   useEffect(() => {
-    // Simular carga de datos
-    setTimeout(() => {
-      setUsers(mockUsers);
-      setLoading(false);
-    }, 1000);
+    const loadAdminData = async () => {
+      try {
+        setLoading(true);
+        
+        // Cargar usuarios reales
+        const usersData = await AdminService.getAllUsers();
+        setUsers(usersData);
+        
+        // Cargar estadísticas
+        const systemStats = await AdminService.getSystemStats();
+        setStats({
+          totalUsers: systemStats.totalUsers,
+          premiumUsers: systemStats.premiumUsers,
+          freeUsers: systemStats.freeUsers,
+          totalRevenue: systemStats.totalRevenue
+        });
+        
+      } catch (error) {
+        console.error('Error loading admin data:', error);
+        toast.error('Error al cargar datos de administración');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAdminData();
   }, []);
 
   const filteredUsers = users.filter(user => {
@@ -108,36 +79,47 @@ export default function AdminPage() {
     return matchesSearch && matchesFilter;
   });
 
-  const handleUpgradeUser = (userId: string, subscriptionType: 'premium' | 'enterprise') => {
-    setUsers(users.map(user => 
-      user.id === userId 
-        ? { ...user, isPremium: true, subscriptionType }
-        : user
-    ));
-    toast.success(`Usuario actualizado a ${subscriptionType}`);
-  };
-
-  const handleDowngradeUser = (userId: string) => {
-    setUsers(users.map(user => 
-      user.id === userId 
-        ? { ...user, isPremium: false, subscriptionType: 'free' }
-        : user
-    ));
-    toast.success('Usuario degradado a plan gratuito');
-  };
-
-  const handleDeleteUser = (userId: string) => {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-      setUsers(users.filter(user => user.id !== userId));
-      toast.success('Usuario eliminado');
+  const handleUpgradeUser = async (userId: string, subscriptionType: 'premium' | 'enterprise') => {
+    try {
+      await AdminService.updateUserSubscription(userId, subscriptionType);
+      setUsers(users.map(user => 
+        user.id === userId 
+          ? { ...user, isPremium: true, subscriptionType }
+          : user
+      ));
+      toast.success(`Usuario actualizado a ${subscriptionType}`);
+    } catch (error) {
+      console.error('Error upgrading user:', error);
+      toast.error('Error al actualizar usuario');
     }
   };
 
-  const stats = {
-    totalUsers: users.length,
-    premiumUsers: users.filter(u => u.isPremium).length,
-    freeUsers: users.filter(u => !u.isPremium).length,
-    totalRevenue: users.reduce((sum, user) => sum + user.totalRevenue, 0)
+  const handleDowngradeUser = async (userId: string) => {
+    try {
+      await AdminService.updateUserSubscription(userId, 'free');
+      setUsers(users.map(user => 
+        user.id === userId 
+          ? { ...user, isPremium: false, subscriptionType: 'free' }
+          : user
+      ));
+      toast.success('Usuario degradado a plan gratuito');
+    } catch (error) {
+      console.error('Error downgrading user:', error);
+      toast.error('Error al degradar usuario');
+    }
+  };
+
+  const handleDeleteUser = async (userId: string) => {
+    if (confirm('¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.')) {
+      try {
+        await AdminService.deleteUser(userId);
+        setUsers(users.filter(user => user.id !== userId));
+        toast.success('Usuario eliminado');
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        toast.error('Error al eliminar usuario');
+      }
+    }
   };
 
   if (loading) {
@@ -169,9 +151,20 @@ export default function AdminPage() {
                 Gestiona usuarios, suscripciones y configuraciones del sistema
               </p>
             </div>
-            <div className="flex items-center space-x-2 bg-red-100 text-red-800 px-3 py-1 rounded-full">
-              <ShieldCheckIcon className="h-4 w-4" />
-              <span className="text-sm font-medium">Super Admin</span>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => window.location.reload()}
+                className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+              >
+                <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Actualizar
+              </button>
+              <div className="flex items-center space-x-2 bg-red-100 text-red-800 px-3 py-1 rounded-full">
+                <ShieldCheckIcon className="h-4 w-4" />
+                <span className="text-sm font-medium">Super Admin</span>
+              </div>
             </div>
           </div>
 
