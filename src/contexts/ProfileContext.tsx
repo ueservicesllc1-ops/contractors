@@ -107,6 +107,8 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         country: data.country,
         specialties: data.specialties,
         yearsInBusiness: data.yearsInBusiness,
+        isPremium: false,
+        subscriptionType: 'free',
         teamSize: data.teamSize,
         liabilityInsurance: data.liabilityInsurance ? {
           ...data.liabilityInsurance,
