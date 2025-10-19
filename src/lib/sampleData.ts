@@ -205,7 +205,7 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     clientId: '', // Se asignará dinámicamente
     projectId: '', // Se asignará dinámicamente
     type: 'final',
-    status: 'pending',
+    status: 'sent',
     issueDate: new Date('2025-02-10'),
     dueDate: new Date('2025-03-10'),
     items: [
@@ -346,7 +346,7 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     clientId: '', // Se asignará dinámicamente
     projectId: '', // Se asignará dinámicamente
     type: 'final',
-    status: 'pending',
+    status: 'sent',
     issueDate: new Date('2025-05-08'),
     dueDate: new Date('2025-06-08'),
     items: [
