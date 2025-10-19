@@ -20,9 +20,8 @@ import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
   const { t } = useLanguage();
-  const { profile } = useProfile();
+  const { profile, isPremium, subscriptionType } = useProfile();
   const [activeTab, setActiveTab] = useState('branding');
-  const [isPremium, setIsPremium] = useState(false); // TODO: Get from user subscription
 
   const tabs = [
     { id: 'branding', name: 'Branding', icon: PhotoIcon },

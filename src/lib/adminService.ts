@@ -76,12 +76,27 @@ export class AdminService {
   // Actualizar tipo de suscripción de usuario
   static async updateUserSubscription(userId: string, subscriptionType: 'free' | 'premium' | 'enterprise'): Promise<void> {
     try {
+      // Actualizar en la colección 'users'
       const userRef = doc(db, 'users', userId);
       await updateDoc(userRef, {
         isPremium: subscriptionType !== 'free',
         subscriptionType,
         updatedAt: new Date()
       });
+
+      // También actualizar en la colección 'profiles' si existe
+      try {
+        const profileRef = doc(db, 'profiles', userId);
+        await updateDoc(profileRef, {
+          isPremium: subscriptionType !== 'free',
+          subscriptionType,
+          updatedAt: new Date()
+        });
+        console.log(`✅ Profile ${userId} subscription updated to ${subscriptionType}`);
+      } catch (profileError) {
+        console.log('Profile not found, only user updated');
+      }
+
       console.log(`✅ User ${userId} subscription updated to ${subscriptionType}`);
     } catch (error) {
       console.error('Error updating user subscription:', error);

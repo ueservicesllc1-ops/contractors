@@ -43,6 +43,10 @@ export interface CompanyProfile {
   isComplete: boolean;
   profileCompletionDate?: Date;
   
+  // Subscription
+  isPremium: boolean;
+  subscriptionType: 'free' | 'premium' | 'enterprise';
+  
   // Timestamps
   createdAt: Date;
   updatedAt: Date;

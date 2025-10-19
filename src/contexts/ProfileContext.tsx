@@ -10,6 +10,8 @@ interface ProfileContextType {
   profile: CompanyProfile | null;
   loading: boolean;
   isProfileComplete: boolean;
+  isPremium: boolean;
+  subscriptionType: 'free' | 'premium' | 'enterprise';
   updateProfile: (data: ProfileSetupData) => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -22,6 +24,8 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const isProfileComplete = profile?.isComplete === true;
+  const isPremium = profile?.isPremium || false;
+  const subscriptionType = profile?.subscriptionType || 'free';
   
   // Debug: Log cuando cambie el estado del perfil
   useEffect(() => {
@@ -29,10 +33,12 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
       profile: profile,
       isComplete: profile?.isComplete,
       isProfileComplete: isProfileComplete,
+      isPremium: isPremium,
+      subscriptionType: subscriptionType,
       loading: loading,
       userId: user?.id
     });
-  }, [profile, isProfileComplete, loading, user?.id]);
+  }, [profile, isProfileComplete, isPremium, subscriptionType, loading, user?.id]);
 
   const fetchProfile = async () => {
     if (!user) {
@@ -147,6 +153,8 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     profile,
     loading,
     isProfileComplete,
+    isPremium,
+    subscriptionType,
     updateProfile,
     refreshProfile,
   };
