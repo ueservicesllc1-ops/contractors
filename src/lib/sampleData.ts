@@ -9,41 +9,51 @@ export const sampleClients: Omit<Client, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: 'María González',
     email: 'maria.gonzalez@email.com',
     phone: '+1 (555) 123-4567',
-    address: '123 Main Street, Ciudad de México, CDMX 01000',
-    company: 'Constructora González S.A.',
-    notes: 'Cliente preferencial con proyectos residenciales'
+    address: '123 Main Street',
+    city: 'Ciudad de México',
+    state: 'CDMX',
+    zipCode: '01000',
+    notes: 'Cliente preferencial con proyectos residenciales - Constructora González S.A.'
   },
   {
     name: 'Carlos Rodríguez',
     email: 'carlos.rodriguez@empresa.com',
     phone: '+1 (555) 234-5678',
-    address: '456 Business Ave, Guadalajara, Jalisco 44100',
-    company: 'Rodríguez & Asociados',
-    notes: 'Especializado en proyectos comerciales'
+    address: '456 Business Ave',
+    city: 'Guadalajara',
+    state: 'Jalisco',
+    zipCode: '44100',
+    notes: 'Especializado en proyectos comerciales - Rodríguez & Asociados'
   },
   {
     name: 'Ana Martínez',
     email: 'ana.martinez@constructora.com',
     phone: '+1 (555) 345-6789',
-    address: '789 Industrial Blvd, Monterrey, Nuevo León 64000',
-    company: 'Martínez Construcciones',
-    notes: 'Proyectos industriales y de infraestructura'
+    address: '789 Industrial Blvd',
+    city: 'Monterrey',
+    state: 'Nuevo León',
+    zipCode: '64000',
+    notes: 'Proyectos industriales y de infraestructura - Martínez Construcciones'
   },
   {
     name: 'Roberto Silva',
     email: 'roberto.silva@arquitectura.com',
     phone: '+1 (555) 456-7890',
-    address: '321 Design District, Puebla, Puebla 72000',
-    company: 'Silva Arquitectos',
-    notes: 'Enfoque en arquitectura sostenible'
+    address: '321 Design District',
+    city: 'Puebla',
+    state: 'Puebla',
+    zipCode: '72000',
+    notes: 'Enfoque en arquitectura sostenible - Silva Arquitectos'
   },
   {
     name: 'Laura Fernández',
     email: 'laura.fernandez@desarrollo.com',
     phone: '+1 (555) 567-8901',
-    address: '654 Development St, Tijuana, Baja California 22000',
-    company: 'Fernández Desarrollo',
-    notes: 'Proyectos de vivienda social'
+    address: '654 Development St',
+    city: 'Tijuana',
+    state: 'Baja California',
+    zipCode: '22000',
+    notes: 'Proyectos de vivienda social - Fernández Desarrollo'
   }
 ];
 
