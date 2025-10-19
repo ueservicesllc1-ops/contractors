@@ -163,16 +163,22 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     dueDate: new Date('2025-02-15'),
     items: [
       {
+        id: 'item-1',
         description: 'Construcción de cimientos y estructura',
         quantity: 1,
+        unit: 'proyecto',
         unitPrice: 45000,
-        total: 45000
+        total: 45000,
+        category: 'labor'
       },
       {
+        id: 'item-2',
         description: 'Materiales de construcción',
         quantity: 1,
+        unit: 'lote',
         unitPrice: 25000,
-        total: 25000
+        total: 25000,
+        category: 'materials'
       }
     ],
     subtotal: 70000,
@@ -191,16 +197,22 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     dueDate: new Date('2025-03-10'),
     items: [
       {
+        id: 'item-3',
         description: 'Instalación eléctrica y plomería',
         quantity: 1,
+        unit: 'proyecto',
         unitPrice: 35000,
-        total: 35000
+        total: 35000,
+        category: 'labor'
       },
       {
+        id: 'item-4',
         description: 'Mano de obra especializada',
         quantity: 40,
+        unit: 'horas',
         unitPrice: 800,
-        total: 32000
+        total: 32000,
+        category: 'labor'
       }
     ],
     subtotal: 67000,
@@ -219,16 +231,22 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     dueDate: new Date('2025-04-05'),
     items: [
       {
+        id: 'item-5',
         description: 'Acabados y pintura',
         quantity: 1,
+        unit: 'proyecto',
         unitPrice: 28000,
-        total: 28000
+        total: 28000,
+        category: 'labor'
       },
       {
+        id: 'item-6',
         description: 'Materiales de acabado',
         quantity: 1,
+        unit: 'lote',
         unitPrice: 15000,
-        total: 15000
+        total: 15000,
+        category: 'materials'
       }
     ],
     subtotal: 43000,
@@ -247,16 +265,22 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     dueDate: new Date('2025-05-12'),
     items: [
       {
+        id: 'item-7',
         description: 'Instalación de pisos',
         quantity: 120,
+        unit: 'm²',
         unitPrice: 150,
-        total: 18000
+        total: 18000,
+        category: 'labor'
       },
       {
+        id: 'item-8',
         description: 'Material de pisos premium',
         quantity: 1,
+        unit: 'lote',
         unitPrice: 22000,
-        total: 22000
+        total: 22000,
+        category: 'materials'
       }
     ],
     subtotal: 40000,
@@ -275,16 +299,22 @@ export const sampleInvoices: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>[] =
     dueDate: new Date('2025-06-08'),
     items: [
       {
+        id: 'item-9',
         description: 'Trabajos finales y limpieza',
         quantity: 1,
+        unit: 'proyecto',
         unitPrice: 18000,
-        total: 18000
+        total: 18000,
+        category: 'labor'
       },
       {
+        id: 'item-10',
         description: 'Inspección final y certificaciones',
         quantity: 1,
+        unit: 'servicio',
         unitPrice: 5000,
-        total: 5000
+        total: 5000,
+        category: 'other'
       }
     ],
     subtotal: 23000,
