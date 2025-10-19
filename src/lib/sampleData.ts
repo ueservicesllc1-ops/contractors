@@ -64,7 +64,7 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     description: 'Construcción de casa unifamiliar de 3 habitaciones con diseño contemporáneo',
     projectNumber: 'PROJ-2025-001',
     clientId: '', // Se asignará dinámicamente
-    status: 'inProgress',
+    status: 'active',
     startDate: new Date('2025-01-15'),
     endDate: new Date('2025-06-15'),
     estimatedCost: 450000,
