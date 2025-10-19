@@ -72,7 +72,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Calle Reforma 123',
     city: 'Ciudad de México',
     state: 'CDMX',
-    zipCode: '01000'
+    zipCode: '01000',
+    phases: [],
+    teamMembers: [],
+    files: []
   },
   {
     name: 'Edificio Comercial Centro',
@@ -87,7 +90,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Av. Insurgentes 456',
     city: 'Ciudad de México',
     state: 'CDMX',
-    zipCode: '06100'
+    zipCode: '06100',
+    phases: [],
+    teamMembers: [],
+    files: []
   },
   {
     name: 'Remodelación Industrial',
@@ -102,7 +108,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Zona Industrial Norte 789',
     city: 'Monterrey',
     state: 'Nuevo León',
-    zipCode: '64000'
+    zipCode: '64000',
+    phases: [],
+    teamMembers: [],
+    files: []
   },
   {
     name: 'Complejo Habitacional',
@@ -117,7 +126,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Fraccionamiento Las Flores',
     city: 'Tijuana',
     state: 'Baja California',
-    zipCode: '22000'
+    zipCode: '22000',
+    phases: [],
+    teamMembers: [],
+    files: []
   },
   {
     name: 'Oficinas Corporativas',
@@ -132,7 +144,10 @@ export const sampleProjects: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>[] =
     address: 'Polanco Business District',
     city: 'Ciudad de México',
     state: 'CDMX',
-    zipCode: '11560'
+    zipCode: '11560',
+    phases: [],
+    teamMembers: [],
+    files: []
   }
 ];
 
