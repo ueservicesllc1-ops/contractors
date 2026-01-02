@@ -69,6 +69,7 @@ export default function EstimateForm({
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<EstimateFormData>({
     resolver: zodResolver(estimateSchema),
@@ -85,6 +86,39 @@ export default function EstimateForm({
   });
 
   const taxRate = watch('taxRate') ?? 6.25;
+
+  // Cargar datos del estimado inicial cuando esté disponible
+  useEffect(() => {
+    if (initialData && initialData.id) {
+      // Actualizar valores del formulario
+      reset({
+        name: initialData.name || '',
+        description: initialData.description || '',
+        projectId: initialData.projectId || '',
+        clientId: initialData.clientId || '',
+        validUntil: initialData.validUntil ? new Date(initialData.validUntil).toISOString().split('T')[0] : '',
+        taxRate: initialData.taxRate ?? 6.25,
+        terms: initialData.terms || 'Net 30 days',
+        notes: initialData.notes || '',
+      });
+
+      // Cargar items de las secciones
+      if (initialData.sections && initialData.sections.length > 0) {
+        const allItems: EstimateItem[] = [];
+        initialData.sections.forEach(section => {
+          if (section.items && section.items.length > 0) {
+            allItems.push(...section.items);
+          }
+        });
+        
+        if (allItems.length > 0) {
+          console.log('Loading items from initialData:', allItems);
+          setItems(allItems);
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData?.id]);
 
   // Calculate totals whenever items change
   useEffect(() => {

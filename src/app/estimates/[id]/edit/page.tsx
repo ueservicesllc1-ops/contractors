@@ -35,12 +35,15 @@ export default function EditEstimatePage() {
         setLoading(true);
         
         // Cargar estimado
+        console.log('Loading estimate with ID from params:', params.id);
         const estimateData = await EstimateService.getEstimate(params.id as string);
         if (!estimateData) {
           toast.error('Estimado no encontrado');
           router.push('/estimates');
           return;
         }
+        console.log('Estimate loaded:', estimateData);
+        console.log('Estimate ID:', estimateData.id);
         setEstimate(estimateData);
 
         // Cargar proyectos y clientes
@@ -68,13 +71,23 @@ export default function EditEstimatePage() {
       return;
     }
 
+    if (!estimate || !estimate.id) {
+      toast.error('Error: No se pudo obtener el ID del estimado');
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      // Actualizar en Firebase
-      await EstimateService.updateEstimate(updatedEstimate.id, updatedEstimate);
+      // Usar el ID del estimado cargado, no el del formulario (que puede tener un ID generado)
+      const estimateId = estimate.id;
+      console.log('Updating estimate with ID:', estimateId);
+      console.log('Updated estimate data:', updatedEstimate);
       
-      console.log('Estimate updated in Firebase:', updatedEstimate.id);
+      // Actualizar en Firebase usando el ID real del documento
+      await EstimateService.updateEstimate(estimateId, updatedEstimate);
+      
+      console.log('Estimate updated in Firebase:', estimateId);
       toast.success('Estimado actualizado exitosamente');
       router.push('/estimates');
     } catch (error) {
@@ -152,15 +165,20 @@ export default function EditEstimatePage() {
           </div>
 
           {/* Estimate Form */}
-          <EstimateForm
-            initialData={estimate}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-            projects={projects}
-            clients={clients}
-            onClientCreated={handleClientCreated}
-            onProjectCreated={handleProjectCreated}
-          />
+          {estimate && (
+            <EstimateForm
+              initialData={{
+                ...estimate,
+                id: estimate.id, // Asegurar que el ID real se pase
+              }}
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+              projects={projects}
+              clients={clients}
+              onClientCreated={handleClientCreated}
+              onProjectCreated={handleProjectCreated}
+            />
+          )}
         </div>
       </AppLayout>
     </ProtectedRoute>

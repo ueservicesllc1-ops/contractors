@@ -35,7 +35,7 @@ export default function EstimateView({
   clientAddress 
 }: EstimateViewProps) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const { generatePdf, generatePdfAlternative } = usePdfGenerator();
+  const { generatePdf } = usePdfGenerator();
 
   const handlePrint = () => {
     window.print();
@@ -45,81 +45,9 @@ export default function EstimateView({
   const handleDownloadPdf = async () => {
     try {
       setIsGeneratingPdf(true);
-      
       const filename = `estimado-${estimate.estimateNumber}.pdf`;
-      
-      // Crear una versión simplificada del estimado sin gradientes
-      const createSimplifiedEstimate = () => {
-        const originalElement = document.getElementById('estimate-container');
-        if (!originalElement) return null;
-        
-        const simplified = originalElement.cloneNode(true) as HTMLElement;
-        
-        // Función recursiva para limpiar estilos problemáticos
-        const cleanElement = (el: HTMLElement) => {
-          // Remover todas las clases de gradientes
-          const problematicClasses = [
-            'bg-gradient-to-r', 'from-slate-50', 'to-blue-50', 'from-gray-50', 'to-slate-50',
-            'from-slate-100', 'to-slate-200', 'from-blue-50', 'to-slate-50',
-            'from-slate-400', 'to-slate-500', 'bg-gradient-to-r'
-          ];
-          
-          if (el.classList) {
-            problematicClasses.forEach(cls => el.classList.remove(cls));
-          }
-          
-          // Aplicar estilos básicos seguros
-          el.style.backgroundColor = '#ffffff';
-          el.style.color = '#000000';
-          el.style.border = '1px solid #e5e7eb';
-          
-          // Limpiar elementos hijos
-          Array.from(el.children).forEach(child => {
-            if (child instanceof HTMLElement) {
-              cleanElement(child);
-            }
-          });
-        };
-        
-        cleanElement(simplified);
-        
-        // Agregar estilos básicos al contenedor
-        simplified.style.padding = '20px';
-        simplified.style.fontFamily = 'Arial, sans-serif';
-        simplified.style.fontSize = '14px';
-        simplified.style.lineHeight = '1.5';
-        simplified.style.width = '800px';
-        
-        return simplified;
-      };
-      
-      try {
-        // Crear elemento simplificado
-        const simplifiedElement = createSimplifiedEstimate();
-        if (!simplifiedElement) {
-          throw new Error('No se pudo crear el elemento simplificado');
-        }
-        
-        // Agregar temporalmente al DOM
-        simplifiedElement.style.position = 'absolute';
-        simplifiedElement.style.left = '-9999px';
-        simplifiedElement.style.top = '0';
-        simplifiedElement.id = 'estimate-simplified';
-        document.body.appendChild(simplifiedElement);
-        
-        // Usar método alternativo con elemento simplificado
-        await generatePdfAlternative('estimate-simplified', filename);
-        toast.success('PDF generado exitosamente');
-        
-        // Remover elemento temporal
-        document.body.removeChild(simplifiedElement);
-        
-      } catch (error) {
-        console.warn('Simplified method failed, trying original:', error);
-        // Fallback al método original
-        await generatePdfAlternative('estimate-container', filename);
-        toast.success('PDF generado usando método alternativo');
-      }
+      await generatePdf('estimate-container', filename);
+      toast.success('PDF generado exitosamente');
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast.error('Error al generar el PDF');
@@ -219,7 +147,9 @@ export default function EstimateView({
         <div className="px-8 py-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Desglose de Costos</h3>
           
-          {estimate.sections.map((section) => (
+          {estimate.sections
+            .filter((section) => section.items.length > 0)
+            .map((section) => (
             <div key={section.id} className="mb-8">
               <div className="bg-gradient-to-r from-slate-100 to-slate-200 px-4 py-3 border-b border-slate-300">
                 <h4 className="font-semibold text-gray-900">{section.name}</h4>
@@ -228,59 +158,53 @@ export default function EstimateView({
                 )}
               </div>
               
-              {section.items.length === 0 ? (
-                <div className="px-4 py-8 text-center text-gray-500">
-                  <p>No hay items en esta sección</p>
-                </div>
-              ) : (
-                <div className="overflow-hidden">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gradient-to-r from-slate-400 to-slate-500">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                          Descripción
-                        </th>
-                        <th className="px-4 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
-                          Cantidad
-                        </th>
-                        <th className="px-4 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
-                          Unidad
-                        </th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
-                          Precio Unit.
-                        </th>
-                        <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
-                          Total
-                        </th>
+              <div className="overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gradient-to-r from-slate-400 to-slate-500">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Descripción
+                      </th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                        Cantidad
+                      </th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                        Unidad
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
+                        Precio Unit.
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
+                        Total
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {section.items.map((item) => (
+                      <tr key={item.id}>
+                        <td className="px-4 py-3 text-sm text-gray-900">
+                          {item.description}
+                          {item.notes && (
+                            <p className="text-xs text-gray-500 mt-1">{item.notes}</p>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-center text-sm text-gray-900">
+                          {item.quantity}
+                        </td>
+                        <td className="px-4 py-3 text-center text-sm text-gray-900">
+                          {item.unit}
+                        </td>
+                        <td className="px-4 py-3 text-right text-sm text-gray-900">
+                          {formatCurrency(item.unitPrice)}
+                        </td>
+                        <td className="px-4 py-3 text-right text-sm font-medium text-gray-900">
+                          {formatCurrency(item.total)}
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {section.items.map((item) => (
-                        <tr key={item.id}>
-                          <td className="px-4 py-3 text-sm text-gray-900">
-                            {item.description}
-                            {item.notes && (
-                              <p className="text-xs text-gray-500 mt-1">{item.notes}</p>
-                            )}
-                          </td>
-                          <td className="px-4 py-3 text-center text-sm text-gray-900">
-                            {item.quantity}
-                          </td>
-                          <td className="px-4 py-3 text-center text-sm text-gray-900">
-                            {item.unit}
-                          </td>
-                          <td className="px-4 py-3 text-right text-sm text-gray-900">
-                            {formatCurrency(item.unitPrice)}
-                          </td>
-                          <td className="px-4 py-3 text-right text-sm font-medium text-gray-900">
-                            {formatCurrency(item.total)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               
               <div className="bg-gray-100 px-4 py-3 border-t">
                 <div className="flex justify-end">

@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, where, orderBy, writeBatch } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, where, orderBy, writeBatch, Timestamp } from 'firebase/firestore';
 import { Estimate } from '@/types';
 
 export class EstimateService {
@@ -8,12 +8,23 @@ export class EstimateService {
   // Crear un nuevo estimado
   static async createEstimate(estimate: Omit<Estimate, 'id' | 'createdAt' | 'updatedAt'>, userId: string): Promise<string> {
     try {
-      const estimateData = {
-        ...estimate,
+      // Remover el campo 'id' si existe (Firestore genera su propio ID)
+      const { id, ...estimateWithoutId } = estimate as any;
+      
+      // Convertir fechas a Timestamp
+      const estimateData: any = {
+        ...estimateWithoutId,
         userId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
       };
+      
+      // Convertir validUntil a Timestamp si existe
+      if (estimate.validUntil) {
+        estimateData.validUntil = estimate.validUntil instanceof Date 
+          ? Timestamp.fromDate(estimate.validUntil)
+          : Timestamp.fromDate(new Date(estimate.validUntil));
+      }
 
       const docRef = await addDoc(collection(db, this.collectionName), estimateData);
       console.log('Estimate created with ID:', docRef.id);
@@ -86,19 +97,60 @@ export class EstimateService {
   // Obtener un estimado por ID
   static async getEstimate(estimateId: string): Promise<Estimate | null> {
     try {
+      console.log('🔍 Getting estimate with ID:', estimateId);
+      console.log('🔍 Collection name:', this.collectionName);
       const docRef = doc(db, this.collectionName, estimateId);
       const docSnap = await getDoc(docRef);
       
       if (docSnap.exists()) {
         const data = docSnap.data();
-        return {
-          id: docSnap.id,
-          ...data,
+        console.log('✅ Estimate found, document ID:', docSnap.id);
+        console.log('✅ Estimate data keys:', Object.keys(data));
+        
+        // Remover el campo 'id' de data si existe para usar el ID real del documento
+        const { id: dataId, ...dataWithoutId } = data;
+        
+        const estimate = {
+          id: docSnap.id, // Usar siempre el ID real del documento
+          ...dataWithoutId,
           createdAt: data.createdAt?.toDate() || new Date(),
           updatedAt: data.updatedAt?.toDate() || new Date(),
           validUntil: data.validUntil?.toDate() || new Date(),
         } as Estimate;
+        
+        console.log('✅ Returning estimate with ID:', estimate.id);
+        return estimate;
       } else {
+        console.warn('⚠️ Estimate not found with direct ID, trying to find by estimateNumber or data.id field');
+        
+        // Si no se encuentra con el ID directo, intentar buscar por estimateNumber o por el campo 'id' guardado
+        // Esto es para manejar estimados antiguos que pueden tener IDs aleatorios guardados
+        try {
+          const q = query(
+            collection(db, this.collectionName),
+            where('id', '==', estimateId)
+          );
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            const foundDoc = querySnapshot.docs[0];
+            console.log('✅ Found estimate by data.id field, real document ID:', foundDoc.id);
+            const data = foundDoc.data();
+            const { id: dataId, ...dataWithoutId } = data;
+            
+            return {
+              id: foundDoc.id, // Usar el ID real del documento
+              ...dataWithoutId,
+              createdAt: data.createdAt?.toDate() || new Date(),
+              updatedAt: data.updatedAt?.toDate() || new Date(),
+              validUntil: data.validUntil?.toDate() || new Date(),
+            } as Estimate;
+          }
+        } catch (searchError) {
+          console.error('Error searching by data.id:', searchError);
+        }
+        
+        console.error('❌ Estimate not found with ID:', estimateId);
         return null;
       }
     } catch (error) {
@@ -110,11 +162,42 @@ export class EstimateService {
   // Actualizar un estimado
   static async updateEstimate(estimateId: string, estimate: Partial<Estimate>): Promise<void> {
     try {
+      console.log('📝 ===== UPDATE ESTIMATE START =====');
+      console.log('📝 Estimate ID:', estimateId);
+      console.log('📝 Collection name:', this.collectionName);
+      
       const docRef = doc(db, this.collectionName, estimateId);
-      await updateDoc(docRef, {
+      
+      // Verificar que el documento existe
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        console.error('❌ Document does not exist:', estimateId);
+        throw new Error(`Estimado con ID ${estimateId} no encontrado`);
+      }
+      
+      console.log('✅ Document exists, proceeding with update');
+      
+      // Preparar datos para actualizar, convirtiendo fechas a Timestamp
+      const updateData: any = {
         ...estimate,
-        updatedAt: new Date(),
-      });
+        updatedAt: Timestamp.now(),
+      };
+      
+      // Convertir fechas a Timestamp si existen
+      if (estimate.validUntil) {
+        updateData.validUntil = estimate.validUntil instanceof Date 
+          ? Timestamp.fromDate(estimate.validUntil)
+          : Timestamp.fromDate(new Date(estimate.validUntil));
+      }
+      
+      // Remover campos que no deben actualizarse directamente
+      delete updateData.id;
+      delete updateData.createdAt;
+      
+      console.log('📝 Update data:', updateData);
+      
+      await updateDoc(docRef, updateData);
+      console.log('✅ Estimate updated successfully');
     } catch (error) {
       console.error('Error updating estimate:', error);
       throw error;

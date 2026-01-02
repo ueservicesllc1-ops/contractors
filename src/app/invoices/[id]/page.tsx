@@ -19,7 +19,7 @@ export default function InvoiceDetailPage() {
   const router = useRouter();
   const { profile } = useProfile();
   const { t } = useLanguage();
-  const { generatePdf, generatePdfAlternative } = usePdfGenerator();
+  const { generatePdf } = usePdfGenerator();
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
@@ -119,81 +119,9 @@ export default function InvoiceDetailPage() {
     
     try {
       setIsGeneratingPdf(true);
-      
       const filename = `invoice-${invoice.invoiceNumber}.pdf`;
-      
-      // Crear una versión simplificada de la factura sin gradientes
-      const createSimplifiedInvoice = () => {
-        const originalElement = document.getElementById('invoice-container');
-        if (!originalElement) return null;
-        
-        const simplified = originalElement.cloneNode(true) as HTMLElement;
-        
-        // Función recursiva para limpiar estilos problemáticos
-        const cleanElement = (el: HTMLElement) => {
-          // Remover todas las clases de gradientes
-          const problematicClasses = [
-            'bg-gradient-to-r', 'from-slate-50', 'to-blue-50', 'from-gray-50', 'to-slate-50',
-            'from-slate-100', 'to-slate-200', 'from-blue-50', 'to-slate-50',
-            'from-slate-400', 'to-slate-500', 'bg-gradient-to-r'
-          ];
-          
-          if (el.classList) {
-            problematicClasses.forEach(cls => el.classList.remove(cls));
-          }
-          
-          // Aplicar estilos básicos seguros
-          el.style.backgroundColor = '#ffffff';
-          el.style.color = '#000000';
-          el.style.border = '1px solid #e5e7eb';
-          
-          // Limpiar elementos hijos
-          Array.from(el.children).forEach(child => {
-            if (child instanceof HTMLElement) {
-              cleanElement(child);
-            }
-          });
-        };
-        
-        cleanElement(simplified);
-        
-        // Agregar estilos básicos al contenedor
-        simplified.style.padding = '20px';
-        simplified.style.fontFamily = 'Arial, sans-serif';
-        simplified.style.fontSize = '14px';
-        simplified.style.lineHeight = '1.5';
-        simplified.style.width = '800px';
-        
-        return simplified;
-      };
-      
-      try {
-        // Crear elemento simplificado
-        const simplifiedElement = createSimplifiedInvoice();
-        if (!simplifiedElement) {
-          throw new Error('No se pudo crear el elemento simplificado');
-        }
-        
-        // Agregar temporalmente al DOM
-        simplifiedElement.style.position = 'absolute';
-        simplifiedElement.style.left = '-9999px';
-        simplifiedElement.style.top = '0';
-        simplifiedElement.id = 'invoice-simplified';
-        document.body.appendChild(simplifiedElement);
-        
-        // Usar método alternativo con elemento simplificado
-        await generatePdfAlternative('invoice-simplified', filename);
-        toast.success('PDF generado exitosamente');
-        
-        // Remover elemento temporal
-        document.body.removeChild(simplifiedElement);
-        
-      } catch (error) {
-        console.warn('Simplified method failed, trying original:', error);
-        // Fallback al método original
-        await generatePdfAlternative('invoice-container', filename);
-        toast.success('PDF generado usando método alternativo');
-      }
+      await generatePdf('invoice-container', filename);
+      toast.success('PDF generado exitosamente');
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast.error('Error al generar el PDF');

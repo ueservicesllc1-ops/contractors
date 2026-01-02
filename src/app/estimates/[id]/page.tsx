@@ -95,9 +95,9 @@ export default function EstimateViewPage() {
           {/* Estimate View */}
           <EstimateView
             estimate={estimate}
-            projectName="Casa Residencial Norte"
-            clientName="Juan Pérez"
-            clientAddress="456 Oak Street, Newark, NJ 07103"
+            projectName={estimate.projectName || 'N/A'}
+            clientName={estimate.clientName || 'N/A'}
+            clientAddress={estimate.clientAddress || 'N/A'}
           />
         </div>
       </AppLayout>

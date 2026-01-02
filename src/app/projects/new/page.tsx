@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,10 +11,14 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { ClientService } from '@/lib/clientService';
+import { ProjectService } from '@/lib/projectService';
+import { Client } from '@/types';
 
 const projectSchema = z.object({
   name: z.string().min(1, 'El nombre del proyecto es requerido'),
-  clientId: z.string().min(1, 'Debe seleccionar un cliente'),
+  clientName: z.string().min(1, 'El nombre del cliente es requerido'),
   address: z.string().min(1, 'La dirección es requerida'),
   city: z.string().min(1, 'La ciudad es requerida'),
   state: z.string().min(1, 'El estado es requerido'),
@@ -27,36 +31,149 @@ const projectSchema = z.object({
 
 type ProjectFormData = z.infer<typeof projectSchema>;
 
-// Mock clients data
-const mockClients = [
-  { id: '1', name: 'Juan Pérez', email: 'juan@email.com' },
-  { id: '2', name: 'María González', email: 'maria@email.com' },
-  { id: '3', name: 'Carlos Rodríguez', email: 'carlos@email.com' },
-];
-
 export default function NewProjectPage() {
+  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<Array<{url: string, fileName: string}>>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [clientSuggestions, setClientSuggestions] = useState<Client[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [clientInputValue, setClientInputValue] = useState('');
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
   });
 
+  const watchedClientName = watch('clientName');
+
+  // Cargar clientes de Firestore
+  useEffect(() => {
+    const loadClients = async () => {
+      if (!user) return;
+      
+      try {
+        const userClients = await ClientService.getUserClients(user.id);
+        setClients(userClients);
+      } catch (error) {
+        console.error('Error loading clients:', error);
+      }
+    };
+
+    loadClients();
+  }, [user]);
+
+  // Filtrar sugerencias de clientes basado en el input
+  useEffect(() => {
+    if (clientInputValue.trim().length > 0) {
+      const filtered = clients.filter(client =>
+        client.name.toLowerCase().includes(clientInputValue.toLowerCase())
+      );
+      setClientSuggestions(filtered);
+      setShowSuggestions(filtered.length > 0);
+    } else {
+      setClientSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }, [clientInputValue, clients]);
+
+  // Sincronizar el valor del input con el formulario
+  useEffect(() => {
+    setValue('clientName', clientInputValue);
+  }, [clientInputValue, setValue]);
+
+  // Cerrar sugerencias al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.client-input-container')) {
+        setShowSuggestions(false);
+      }
+    };
+
+    if (showSuggestions) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [showSuggestions]);
+
+  const handleClientInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setClientInputValue(value);
+    setValue('clientName', value);
+  };
+
+  const handleSelectClient = (client: Client) => {
+    setClientInputValue(client.name);
+    setValue('clientName', client.name);
+    setShowSuggestions(false);
+  };
+
   const onSubmit = async (data: ProjectFormData) => {
+    if (!user) {
+      toast.error('Debes estar logueado para crear proyectos');
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      // Here you would save to Firebase
-      console.log('Project data:', data);
-      console.log('Uploaded files:', uploadedFiles);
+      // Buscar si el cliente ya existe
+      let clientId: string;
+      const existingClient = clients.find(c => c.name.toLowerCase() === data.clientName.toLowerCase());
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (existingClient) {
+        // Usar el cliente existente
+        clientId = existingClient.id;
+      } else {
+        // Crear un nuevo cliente con solo el nombre
+        const newClientData: Omit<Client, 'id' | 'createdAt' | 'updatedAt'> = {
+          name: data.clientName,
+          email: '', // Email vacío, se puede completar después
+          phone: '', // Teléfono vacío, se puede completar después
+          address: '',
+          city: '',
+          state: '',
+          zipCode: '',
+        };
+        
+        clientId = await ClientService.createClient(user.id, newClientData);
+        toast.success(`Cliente "${data.clientName}" creado automáticamente`);
+      }
+
+      // Crear el proyecto
+      const projectData = {
+        name: data.name,
+        clientId: clientId,
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode,
+        description: data.description || '',
+        status: 'planning' as const,
+        estimatedCost: data.estimatedCost,
+        actualCost: 0,
+        startDate: new Date(data.startDate),
+        endDate: data.endDate ? new Date(data.endDate) : undefined,
+        phases: [],
+        teamMembers: [],
+        files: uploadedFiles.map(f => ({
+          id: f.fileName,
+          name: f.fileName,
+          url: f.url,
+          uploadedAt: new Date(),
+        })),
+      };
+
+      await ProjectService.createProject(user.id, projectData);
       
       toast.success('Proyecto creado exitosamente');
       router.push('/projects');
@@ -124,23 +241,48 @@ export default function NewProjectPage() {
                   </div>
 
                   {/* Client */}
-                  <div>
-                    <label htmlFor="clientId" className="block text-sm font-medium text-gray-700">
+                  <div className="sm:col-span-2 relative client-input-container">
+                    <label htmlFor="clientName" className="block text-sm font-medium text-gray-700">
                       Cliente *
                     </label>
-                    <select
-                      {...register('clientId')}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                    >
-                      <option value="">Seleccionar cliente</option>
-                      {mockClients.map((client) => (
-                        <option key={client.id} value={client.id}>
-                          {client.name} - {client.email}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.clientId && (
-                      <p className="mt-1 text-sm text-red-600">{errors.clientId.message}</p>
+                    <div className="relative">
+                      <input
+                        {...register('clientName')}
+                        type="text"
+                        value={clientInputValue}
+                        onChange={handleClientInputChange}
+                        onFocus={() => {
+                          if (clientSuggestions.length > 0) {
+                            setShowSuggestions(true);
+                          }
+                        }}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        placeholder="Escribe el nombre del cliente o selecciona uno existente"
+                        autoComplete="off"
+                      />
+                      {showSuggestions && clientSuggestions.length > 0 && (
+                        <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                          {clientSuggestions.map((client) => (
+                            <button
+                              key={client.id}
+                              type="button"
+                              onClick={() => handleSelectClient(client)}
+                              className="w-full text-left px-4 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none border-b border-gray-100 last:border-b-0"
+                            >
+                              <div className="font-medium text-gray-900">{client.name}</div>
+                              {client.email && (
+                                <div className="text-sm text-gray-500">{client.email}</div>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Escribe el nombre del cliente. Si no existe, se creará automáticamente en Firestore.
+                    </p>
+                    {errors.clientName && (
+                      <p className="mt-1 text-sm text-red-600">{errors.clientName.message}</p>
                     )}
                   </div>
 
