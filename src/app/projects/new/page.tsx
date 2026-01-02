@@ -34,7 +34,7 @@ type ProjectFormData = z.infer<typeof projectSchema>;
 export default function NewProjectPage() {
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<Array<{url: string, fileName: string}>>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ url: string, fileName: string }>>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [clientSuggestions, setClientSuggestions] = useState<Client[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -57,7 +57,7 @@ export default function NewProjectPage() {
   useEffect(() => {
     const loadClients = async () => {
       if (!user) return;
-      
+
       try {
         const userClients = await ClientService.getUserClients(user.id);
         setClients(userClients);
@@ -124,12 +124,12 @@ export default function NewProjectPage() {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // Buscar si el cliente ya existe
       let clientId: string;
       const existingClient = clients.find(c => c.name.toLowerCase() === data.clientName.toLowerCase());
-      
+
       if (existingClient) {
         // Usar el cliente existente
         clientId = existingClient.id;
@@ -144,14 +144,17 @@ export default function NewProjectPage() {
           state: '',
           zipCode: '',
         };
-        
+
         clientId = await ClientService.createClient(user.id, newClientData);
         toast.success(`Cliente "${data.clientName}" creado automáticamente`);
       }
 
       // Crear el proyecto
+      const projectNumber = `PRJ-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
       const projectData = {
         name: data.name,
+        projectNumber,
         clientId: clientId,
         address: data.address,
         city: data.city,
@@ -165,16 +168,30 @@ export default function NewProjectPage() {
         endDate: data.endDate ? new Date(data.endDate) : undefined,
         phases: [],
         teamMembers: [],
-        files: uploadedFiles.map(f => ({
-          id: f.fileName,
-          name: f.fileName,
-          url: f.url,
-          uploadedAt: new Date(),
-        })),
+        files: uploadedFiles.map(f => {
+          // Determinar el tipo de archivo basado en la extensión o nombre
+          const lowerName = f.fileName.toLowerCase();
+          let type: 'image' | 'document' | 'drawing' | 'other' = 'other';
+
+          if (lowerName.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
+            type = 'image';
+          } else if (lowerName.match(/\.(pdf|doc|docx|xls|xlsx|txt)$/)) {
+            type = 'document';
+          }
+
+          return {
+            id: f.fileName,
+            name: f.fileName,
+            url: f.url,
+            type,
+            uploadedBy: user.id,
+            uploadedAt: new Date(),
+          };
+        }),
       };
 
       await ProjectService.createProject(user.id, projectData);
-      
+
       toast.success('Proyecto creado exitosamente');
       router.push('/projects');
     } catch (error) {

@@ -9,13 +9,13 @@ import { formatCurrency, formatDate } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 interface ApproveChangeOrderPageProps {
-  params: {
+  params: Promise<{
     token: string;
-  };
+  }>;
 }
 
 export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPageProps) {
-  const resolvedParams = params;
+  const resolvedParams = use(params);
   const [changeOrder, setChangeOrder] = useState<ChangeOrder | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -29,24 +29,24 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
       try {
         setLoading(true);
         const order = await ChangeOrderService.getChangeOrderByToken(resolvedParams.token);
-        
+
         if (!order) {
           setError('Orden de cambio no encontrada o enlace inválido');
           return;
         }
-        
+
         // Verificar si ya expiró
         if (new Date() > order.expiresAt) {
           setError('Esta orden de cambio ha expirado');
           return;
         }
-        
+
         // Verificar si ya fue respondida
         if (order.clientResponse) {
           setResponse(order.clientResponse);
           setNotes(order.clientResponseNotes || '');
         }
-        
+
         setChangeOrder(order);
       } catch (error) {
         console.error('Error loading change order:', error);
@@ -62,11 +62,11 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
   // Manejar respuesta
   const handleResponse = async (responseType: 'approved' | 'declined') => {
     if (!changeOrder) return;
-    
+
     try {
       setSubmitting(true);
       await ChangeOrderService.respondToChangeOrder(resolvedParams.token, responseType, notes);
-      
+
       // Enviar email de confirmación al contratista
       try {
         await EmailService.sendResponseConfirmationEmail(
@@ -78,7 +78,7 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
         console.error('Error sending confirmation email:', emailError);
         // No mostramos error al usuario por el email, solo log
       }
-      
+
       setResponse(responseType);
       toast.success(`Orden de cambio ${responseType === 'approved' ? 'aprobada' : 'rechazada'} exitosamente`);
     } catch (error) {
@@ -144,11 +144,10 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
         )}
 
         {isResponded && (
-          <div className={`mb-6 border rounded-md p-4 ${
-            changeOrder.clientResponse === 'approved' 
-              ? 'bg-green-50 border-green-200' 
+          <div className={`mb-6 border rounded-md p-4 ${changeOrder.clientResponse === 'approved'
+              ? 'bg-green-50 border-green-200'
               : 'bg-red-50 border-red-200'
-          }`}>
+            }`}>
             <div className="flex">
               {changeOrder.clientResponse === 'approved' ? (
                 <CheckCircleIcon className="h-5 w-5 text-green-400" />
@@ -156,14 +155,12 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
                 <XCircleIcon className="h-5 w-5 text-red-400" />
               )}
               <div className="ml-3">
-                <h3 className={`text-sm font-medium ${
-                  changeOrder.clientResponse === 'approved' ? 'text-green-800' : 'text-red-800'
-                }`}>
+                <h3 className={`text-sm font-medium ${changeOrder.clientResponse === 'approved' ? 'text-green-800' : 'text-red-800'
+                  }`}>
                   Orden de Cambio {changeOrder.clientResponse === 'approved' ? 'Aprobada' : 'Rechazada'}
                 </h3>
-                <div className={`mt-1 text-sm ${
-                  changeOrder.clientResponse === 'approved' ? 'text-green-700' : 'text-red-700'
-                }`}>
+                <div className={`mt-1 text-sm ${changeOrder.clientResponse === 'approved' ? 'text-green-700' : 'text-red-700'
+                  }`}>
                   <p>
                     Respondida el {changeOrder.clientResponseDate ? formatDate(changeOrder.clientResponseDate) : 'Fecha no disponible'}
                   </p>
@@ -183,7 +180,7 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-medium text-gray-900">{changeOrder.title}</h2>
           </div>
-          
+
           <div className="px-6 py-4 space-y-6">
             {/* Description */}
             <div>
@@ -246,13 +243,12 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
                             {formatCurrency(item.total)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              item.type === 'addition' ? 'bg-green-100 text-green-800' :
-                              item.type === 'deletion' ? 'bg-red-100 text-red-800' :
-                              'bg-yellow-100 text-yellow-800'
-                            }`}>
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.type === 'addition' ? 'bg-green-100 text-green-800' :
+                                item.type === 'deletion' ? 'bg-red-100 text-red-800' :
+                                  'bg-yellow-100 text-yellow-800'
+                              }`}>
                               {item.type === 'addition' ? 'Adición' :
-                               item.type === 'deletion' ? 'Eliminación' : 'Modificación'}
+                                item.type === 'deletion' ? 'Eliminación' : 'Modificación'}
                             </span>
                           </td>
                         </tr>
@@ -263,46 +259,46 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
               </div>
             )}
 
-              {/* Financial Summary */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="text-sm font-medium text-gray-900 mb-4">Resumen Financiero</h3>
-                
-                {/* Monto Adicional Destacado */}
-                <div className="bg-blue-100 border-2 border-blue-300 rounded-lg p-4 mb-4">
-                  <div className="text-center">
-                    <h4 className="text-lg font-semibold text-blue-900">
-                      💰 Monto Adicional del Cambio
-                    </h4>
-                    <p className="text-3xl font-bold text-blue-600 mt-2">
-                      {formatCurrency(changeOrder.changeAmount)}
-                    </p>
-                    <p className="text-sm text-blue-700 mt-1">
-                      Este es el costo adicional que se cobrará por este cambio
-                    </p>
-                  </div>
-                </div>
+            {/* Financial Summary */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h3 className="text-sm font-medium text-gray-900 mb-4">Resumen Financiero</h3>
 
-                <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Monto Original del Proyecto</dt>
-                    <dd className="text-lg font-semibold text-gray-900">
-                      {formatCurrency(changeOrder.originalAmount)}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Monto Adicional</dt>
-                    <dd className="text-lg font-semibold text-blue-600">
-                      {formatCurrency(changeOrder.changeAmount)}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Nuevo Total del Proyecto</dt>
-                    <dd className="text-lg font-semibold text-green-600">
-                      {formatCurrency(changeOrder.newTotalAmount)}
-                    </dd>
-                  </div>
-                </dl>
+              {/* Monto Adicional Destacado */}
+              <div className="bg-blue-100 border-2 border-blue-300 rounded-lg p-4 mb-4">
+                <div className="text-center">
+                  <h4 className="text-lg font-semibold text-blue-900">
+                    💰 Monto Adicional del Cambio
+                  </h4>
+                  <p className="text-3xl font-bold text-blue-600 mt-2">
+                    {formatCurrency(changeOrder.changeAmount)}
+                  </p>
+                  <p className="text-sm text-blue-700 mt-1">
+                    Este es el costo adicional que se cobrará por este cambio
+                  </p>
+                </div>
               </div>
+
+              <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div>
+                  <dt className="text-sm font-medium text-gray-500">Monto Original del Proyecto</dt>
+                  <dd className="text-lg font-semibold text-gray-900">
+                    {formatCurrency(changeOrder.originalAmount)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-medium text-gray-500">Monto Adicional</dt>
+                  <dd className="text-lg font-semibold text-blue-600">
+                    {formatCurrency(changeOrder.changeAmount)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-medium text-gray-500">Nuevo Total del Proyecto</dt>
+                  <dd className="text-lg font-semibold text-green-600">
+                    {formatCurrency(changeOrder.newTotalAmount)}
+                  </dd>
+                </div>
+              </dl>
+            </div>
 
             {/* Expiration Info */}
             <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
@@ -327,7 +323,7 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-medium text-gray-900">Su Respuesta</h2>
             </div>
-            
+
             <div className="px-6 py-4 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -351,7 +347,7 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
                   <XCircleIcon className="h-5 w-5 mr-2" />
                   {submitting ? 'Procesando...' : 'Rechazar'}
                 </button>
-                
+
                 <button
                   onClick={() => handleResponse('approved')}
                   disabled={submitting}

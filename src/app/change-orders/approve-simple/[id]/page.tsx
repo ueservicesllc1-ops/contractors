@@ -8,13 +8,13 @@ import { formatCurrency, formatDate } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 interface ApproveChangeOrderPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPageProps) {
-  const resolvedParams = params;
+  const resolvedParams = use(params);
   const [changeOrder, setChangeOrder] = useState<ChangeOrder | null>(null);
   const [loading, setLoading] = useState(true);
   const [approving, setApproving] = useState(false);
@@ -27,17 +27,17 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
       try {
         setLoading(true);
         const order = await ChangeOrderService.getChangeOrderById(resolvedParams.id);
-        
+
         if (!order) {
           setError('Orden de cambio no encontrada');
           return;
         }
-        
+
         if (order.status !== 'pending') {
           setError('Esta orden de cambio ya fue procesada');
           return;
         }
-        
+
         setChangeOrder(order);
       } catch (error) {
         console.error('Error loading change order:', error);
@@ -53,12 +53,12 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
   // Aprobar orden
   const handleApprove = async () => {
     if (!changeOrder) return;
-    
+
     try {
       setApproving(true);
       await ChangeOrderService.approveChangeOrder(changeOrder.id);
       toast.success('Orden de cambio aprobada exitosamente');
-      
+
       // Actualizar el estado local
       setChangeOrder(prev => prev ? { ...prev, status: 'approved' as const } : null);
     } catch (error) {
@@ -127,7 +127,7 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-medium text-gray-900">{changeOrder.title}</h2>
           </div>
-          
+
           <div className="px-6 py-4 space-y-6">
             {/* Description */}
             <div>
@@ -144,7 +144,7 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
             {/* Financial Summary */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h3 className="text-sm font-medium text-gray-900 mb-4">Resumen Financiero</h3>
-              
+
               <div className="bg-blue-100 border-2 border-blue-300 rounded-lg p-4 mb-4">
                 <div className="text-center">
                   <h4 className="text-lg font-semibold text-blue-900">
@@ -206,7 +206,7 @@ export default function ApproveChangeOrderPage({ params }: ApproveChangeOrderPag
                 <strong>5. Finalización:</strong> Una vez aprobado, el cambio no puede ser revertido sin un nuevo acuerdo.
               </p>
             </div>
-            
+
             <div className="mt-4 flex items-start">
               <div className="flex items-center h-5">
                 <input

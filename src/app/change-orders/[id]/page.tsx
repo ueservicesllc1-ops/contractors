@@ -14,13 +14,13 @@ import { usePdfGenerator } from '@/hooks/usePdfGenerator';
 import toast from 'react-hot-toast';
 
 interface ChangeOrderDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageProps) {
-  const resolvedParams = params;
+  const resolvedParams = use(params);
   const { user } = useAuth();
   const { profile } = useProfile();
   const [changeOrder, setChangeOrder] = useState<ChangeOrder | null>(null);
@@ -33,19 +33,19 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
   useEffect(() => {
     const loadChangeOrder = async () => {
       if (!user || !profile?.userId) return;
-      
+
       try {
         setLoading(true);
         const changeOrders = await ChangeOrderService.getUserChangeOrders(profile.userId);
         const order = changeOrders.find(co => co.id === resolvedParams.id);
-        
+
         if (!order) {
           toast.error('Orden de cambio no encontrada');
           return;
         }
-        
+
         setChangeOrder(order);
-        
+
         // Generar URL de aprobación
         const url = ChangeOrderService.generateApprovalUrl(order.approvalToken);
         setApprovalUrl(url);
@@ -79,19 +79,19 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
   // Descargar PDF
   const handleDownloadPdf = async () => {
     if (!changeOrder) return;
-    
+
     try {
       setIsGeneratingPdf(true);
-      
+
       const filename = `orden-cambio-${changeOrder.changeOrderNumber}.pdf`;
-      
+
       // Crear una versión simplificada de la orden de cambio sin gradientes
       const createSimplifiedChangeOrder = () => {
         const originalElement = document.getElementById('change-order-container');
         if (!originalElement) return null;
-        
+
         const simplified = originalElement.cloneNode(true) as HTMLElement;
-        
+
         // Función recursiva para limpiar estilos problemáticos
         const cleanElement = (el: HTMLElement) => {
           // Remover todas las clases de gradientes
@@ -100,16 +100,16 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
             'from-slate-100', 'to-slate-200', 'from-blue-50', 'to-slate-50',
             'from-slate-400', 'to-slate-500', 'bg-gradient-to-r'
           ];
-          
+
           if (el.classList) {
             problematicClasses.forEach(cls => el.classList.remove(cls));
           }
-          
+
           // Aplicar estilos básicos seguros
           el.style.backgroundColor = '#ffffff';
           el.style.color = '#000000';
           el.style.border = '1px solid #e5e7eb';
-          
+
           // Limpiar elementos hijos
           Array.from(el.children).forEach(child => {
             if (child instanceof HTMLElement) {
@@ -117,40 +117,40 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
             }
           });
         };
-        
+
         cleanElement(simplified);
-        
+
         // Agregar estilos básicos al contenedor
         simplified.style.padding = '20px';
         simplified.style.fontFamily = 'Arial, sans-serif';
         simplified.style.fontSize = '14px';
         simplified.style.lineHeight = '1.5';
         simplified.style.width = '800px';
-        
+
         return simplified;
       };
-      
+
       try {
         // Crear elemento simplificado
         const simplifiedElement = createSimplifiedChangeOrder();
         if (!simplifiedElement) {
           throw new Error('No se pudo crear el elemento simplificado');
         }
-        
+
         // Agregar temporalmente al DOM
         simplifiedElement.style.position = 'absolute';
         simplifiedElement.style.left = '-9999px';
         simplifiedElement.style.top = '0';
         simplifiedElement.id = 'change-order-simplified';
         document.body.appendChild(simplifiedElement);
-        
+
         // Usar método alternativo con elemento simplificado
         await generatePdfAlternative('change-order-simplified', filename);
         toast.success('PDF generado exitosamente');
-        
+
         // Remover elemento temporal
         document.body.removeChild(simplifiedElement);
-        
+
       } catch (error) {
         console.warn('Simplified method failed, trying original:', error);
         // Fallback al método original
@@ -252,7 +252,7 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
                 Volver a Órdenes de Cambio
               </Link>
             </div>
-            
+
             {/* Botones de acción */}
             <div className="flex space-x-3 no-print">
               <button
@@ -281,29 +281,26 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
           </div>
 
           {/* Status Banner */}
-          <div className={`border rounded-md p-4 ${
-            changeOrder.status === 'approved' ? 'bg-green-50 border-green-200' :
-            changeOrder.status === 'declined' ? 'bg-red-50 border-red-200' :
-            changeOrder.status === 'expired' ? 'bg-gray-50 border-gray-200' :
-            'bg-yellow-50 border-yellow-200'
-          }`}>
+          <div className={`border rounded-md p-4 ${changeOrder.status === 'approved' ? 'bg-green-50 border-green-200' :
+              changeOrder.status === 'declined' ? 'bg-red-50 border-red-200' :
+                changeOrder.status === 'expired' ? 'bg-gray-50 border-gray-200' :
+                  'bg-yellow-50 border-yellow-200'
+            }`}>
             <div className="flex">
               {getStatusIcon(changeOrder.status)}
               <div className="ml-3">
-                <h3 className={`text-sm font-medium ${
-                  changeOrder.status === 'approved' ? 'text-green-800' :
-                  changeOrder.status === 'declined' ? 'text-red-800' :
-                  changeOrder.status === 'expired' ? 'text-gray-800' :
-                  'text-yellow-800'
-                }`}>
+                <h3 className={`text-sm font-medium ${changeOrder.status === 'approved' ? 'text-green-800' :
+                    changeOrder.status === 'declined' ? 'text-red-800' :
+                      changeOrder.status === 'expired' ? 'text-gray-800' :
+                        'text-yellow-800'
+                  }`}>
                   Estado: {getStatusText(changeOrder.status)}
                 </h3>
                 {changeOrder.clientResponse && (
-                  <p className={`mt-1 text-sm ${
-                    changeOrder.status === 'approved' ? 'text-green-700' :
-                    changeOrder.status === 'declined' ? 'text-red-700' :
-                    'text-gray-700'
-                  }`}>
+                  <p className={`mt-1 text-sm ${changeOrder.status === 'approved' ? 'text-green-700' :
+                      changeOrder.status === 'declined' ? 'text-red-700' :
+                        'text-gray-700'
+                    }`}>
                     Respondido el {changeOrder.clientResponseDate ? formatDate(changeOrder.clientResponseDate) : 'Fecha no disponible'}
                     {changeOrder.clientResponseNotes && (
                       <span className="block mt-1">
@@ -330,7 +327,7 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
                   Comparte este enlace con tu cliente para que pueda aprobar o rechazar la orden de cambio.
                 </p>
               </div>
-              
+
               <div className="px-6 py-4">
                 <div className="flex">
                   <input
@@ -359,7 +356,7 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-medium text-gray-900">Detalles de la Orden de Cambio</h2>
             </div>
-            
+
             <div className="px-6 py-4 space-y-6">
               {/* Project and Client Info */}
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -435,13 +432,12 @@ export default function ChangeOrderDetailPage({ params }: ChangeOrderDetailPageP
                               {formatCurrency(item.total)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                item.type === 'addition' ? 'bg-green-100 text-green-800' :
-                                item.type === 'deletion' ? 'bg-red-100 text-red-800' :
-                                'bg-yellow-100 text-yellow-800'
-                              }`}>
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.type === 'addition' ? 'bg-green-100 text-green-800' :
+                                  item.type === 'deletion' ? 'bg-red-100 text-red-800' :
+                                    'bg-yellow-100 text-yellow-800'
+                                }`}>
                                 {item.type === 'addition' ? 'Adición' :
-                                 item.type === 'deletion' ? 'Eliminación' : 'Modificación'}
+                                  item.type === 'deletion' ? 'Eliminación' : 'Modificación'}
                               </span>
                             </td>
                           </tr>
